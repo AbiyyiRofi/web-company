@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Blue colors representing water (Primary) */
+    --c-primary-50: 239 246 255;
+    --c-primary-100: 219 234 254;
+    --c-primary-200: 191 219 254;
+    --c-primary-300: 147 197 253;
+    --c-primary-400: 96 165 250;
+    --c-primary-500: 59 130 246;
+    --c-primary-600: 29 78 216;
+    --c-primary-700: 30 64 175;
+    --c-primary-800: 30 58 138;
+    --c-primary-900: 23 37 84;
+    --c-primary-950: 15 23 42;
+
+    /* Accent colors */
+    --c-accent-300: 147 197 253;
+    --c-accent-400: 96 165 250;
+    --c-accent-500: 59 130 246;
+    --c-accent-600: 29 78 216;
+
+    /* Ink / Neutral colors */
+    --c-ink-50: 248 250 252;
+    --c-ink-100: 241 245 249;
+    --c-ink-400: 148 163 184;
+    --c-ink-600: 71 85 105;
+    --c-ink-800: 30 41 59;
+    --c-ink-900: 15 23 42;
+    --c-ink-950: 2 6 23;
+}
