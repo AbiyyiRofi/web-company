@@ -12,10 +12,11 @@ class BranchController extends Controller
 {
     public function index()
     {
-        $branches = Branch::orderByDesc('is_head_office')->orderBy('name')->get();
+        $branches = Branch::cabang()->orderByDesc('is_head_office')->orderBy('name')->get();
+        $ipas = Branch::ipa()->orderBy('name')->get();
         $content = HubungiKamiContent::singleton();
 
-        return view('admin.branches.index', compact('branches', 'content'));
+        return view('admin.branches.index', compact('branches', 'ipas', 'content'));
     }
 
     public function create()
@@ -25,23 +26,13 @@ class BranchController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:30',
-            'whatsapp' => 'nullable|string|max:30',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'operational_hours' => 'nullable|string|max:100',
-            'is_head_office' => 'nullable|boolean',
-        ]);
-
+        $data = $this->validateData($request);
         $data['is_head_office'] = $request->boolean('is_head_office');
         $data['operational_hours'] = $data['operational_hours'] ?? 'Senin–Jumat, 07.30–16.00 WIB';
 
         Branch::create($data);
 
-        return redirect()->route('admin.branches.index')->with('success', 'Cabang berhasil ditambahkan.');
+        return redirect()->route('admin.branches.index')->with('success', 'Lokasi berhasil ditambahkan.');
     }
 
     public function edit(Branch $branch)
@@ -51,7 +42,24 @@ class BranchController extends Controller
 
     public function update(Request $request, Branch $branch)
     {
-        $data = $request->validate([
+        $data = $this->validateData($request);
+        $data['is_head_office'] = $request->boolean('is_head_office');
+
+        $branch->update($data);
+
+        return redirect()->route('admin.branches.index')->with('success', 'Lokasi berhasil diperbarui.');
+    }
+
+    public function destroy(Branch $branch)
+    {
+        $branch->delete();
+        return back()->with('success', 'Lokasi berhasil dihapus.');
+    }
+
+    private function validateData(Request $request): array
+    {
+        return $request->validate([
+            'type' => 'required|in:cabang,ipa',
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'phone' => 'nullable|string|max:30',
@@ -60,22 +68,12 @@ class BranchController extends Controller
             'longitude' => 'required|numeric',
             'operational_hours' => 'nullable|string|max:100',
             'is_head_office' => 'nullable|boolean',
+            'kapasitas_terpasang_text' => 'nullable|required_if:type,ipa|string',
+            'kapasitas_produksi' => 'nullable|required_if:type,ipa|string|max:100',
+            'idle_capacity' => 'nullable|required_if:type,ipa|string|max:100',
         ]);
-
-        $data['is_head_office'] = $request->boolean('is_head_office');
-
-        $branch->update($data);
-
-        return redirect()->route('admin.branches.index')->with('success', 'Cabang berhasil diperbarui.');
     }
 
-    public function destroy(Branch $branch)
-    {
-        $branch->delete();
-        return back()->with('success', 'Cabang berhasil dihapus.');
-    }
-
-    // update header poster utk halaman Hubungi Kami
     public function updateHeader(Request $request)
     {
         $content = HubungiKamiContent::singleton();

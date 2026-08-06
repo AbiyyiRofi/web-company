@@ -22,6 +22,20 @@
     </div>
 
     <div class="bg-white rounded-xl border p-6">
+        <h3 class="font-semibold mb-1">Ucapan Harapan &amp; Terima Kasih</h3>
+        <p class="text-xs text-slate-400 mb-4">
+            Nama &amp; jabatan di bawah foto akan otomatis diambil dari Direktur Utama pada menu "Dewan Direksi" — tidak perlu diisi manual di sini.
+        </p>
+        @if($content->harapan_photo)
+            <img src="{{ asset('storage/'.$content->harapan_photo) }}" class="h-40 object-contain rounded-lg mb-3 bg-slate-50 p-2">
+        @endif
+        <label class="block text-sm font-medium mb-1">Foto Direktur Utama (setengah badan, background transparan/PNG disarankan)</label>
+        <input type="file" name="harapan_photo" accept="image/*" class="w-full text-sm mb-4">
+        <label class="block text-sm font-medium mb-1">Teks Ucapan Harapan &amp; Terima Kasih</label>
+        <textarea name="harapan_text" rows="8" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Kepada seluruh pemangku kepentingan yang kami hormati...">{{ old('harapan_text', $content->harapan_text) }}</textarea>
+    </div>
+
+    <div class="bg-white rounded-xl border p-6">
         <h3 class="font-semibold mb-4">Sejarah</h3>
         @if($content->sejarah_bg_image)
             <img src="{{ asset('storage/'.$content->sejarah_bg_image) }}" class="w-full h-32 object-cover rounded-lg mb-3">

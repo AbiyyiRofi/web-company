@@ -1,0 +1,14 @@
+/* ==========================================================================
+   v2-effects.css — animasi "jatuh dari atas" beruntun (reveal) saja
+   ========================================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(-26px);
+  transition: opacity 0.8s cubic-bezier(.22,.61,.36,1), transform 0.8s cubic-bezier(.22,.61,.36,1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

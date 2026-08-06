@@ -10,8 +10,23 @@ class GalleryController extends Controller
     public function index()
     {
         $header = PageHeader::get('galeri');
-        $galleries = Gallery::withCount('photos')->with(['photos' => fn($q) => $q->limit(1)])->latest()->paginate(9);
-        return view('galleries.index', compact('header', 'galleries'));
+
+        $categories = collect(Gallery::CATEGORIES)->map(function ($label, $slug) {
+            $galleries = Gallery::withCount('photos')
+                ->with(['photos' => fn ($q) => $q->orderBy('sort_order')])
+                ->where('category', $slug)
+                ->latest()
+                ->get();
+
+            return [
+                'slug' => $slug,
+                'label' => $label,
+                'galleries' => $galleries,
+                'covers' => $galleries->map(fn ($g) => optional($g->photos->first())->image_path)->filter()->values(),
+            ];
+        })->values();
+
+        return view('galleries.index', compact('header', 'categories'));
     }
 
     public function show(Gallery $gallery)

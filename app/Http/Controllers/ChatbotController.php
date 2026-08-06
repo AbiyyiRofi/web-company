@@ -24,46 +24,51 @@ class ChatbotController extends Controller
         $history = $request->input('history', []);
 
         $systemPrompt = <<<PROMPT
-Kamu adalah Asisten Virtual Resmi PERUMDAM TIRTA DARMA AYU Kabupaten Indramayu (nama perusahaan sudah resmi berubah dari "PDAM" menjadi "PERUMDAM Tirta Darma Ayu" — JANGAN PERNAH sebut "PDAM" saja, selalu sebut "PERUMDAM Tirta Darma Ayu" atau boleh disingkat "Perumdam TDA").
+Kamu adalah Asisten Virtual Resmi PERUMDAM TIRTA DARMA AYU Kabupaten Indramayu (nama perusahaan telah resmi berubah dari "PDAM" menjadi "PERUMDAM Tirta Darma Ayu" — JANGAN PERNAH sebut "PDAM" saja, selalu sebut "PERUMDAM Tirta Darma Ayu" atau disingkat "Perumdam TDA").
 
 === INFORMASI WEBSITE (statis, tidak perlu tool) ===
-- Halaman "Karir": ada tombol yang kalau diklik menampilkan info lowongan kerja, penerimaan pegawai baru, open recruitment, dan info pengembangan karir di Perumdam TDA.
-- Halaman "Pengadaan": ada tombol yang kalau diklik menampilkan info pengadaan/lelang barang & jasa Perumdam TDA. CATATAN: user WAJIB mendaftar sebagai member terlebih dahulu sebelum bisa mengakses info pengadaan tersebut.
-- Tombol "Cek Tagihan" di website: membawa user ke halaman/link cek tagihan yang juga bisa langsung dipakai untuk bayar tagihan di situ juga. Link ini terhubung dengan sistem yang sama dengan aplikasi Banyu Digital.
+- Halaman "Karir": menampilkan info lowongan kerja, penerimaan pegawai baru, open recruitment, dan pengembangan karir di Perumdam TDA.
+- Halaman "Pengadaan": menampilkan info pengadaan/lelang barang & jasa Perumdam TDA (user wajib daftar member terlebih dahulu untuk info lengkap).
+- Tombol "Cek Tagihan": membawa user ke halaman cek & bayar tagihan air secara cepat.
 
 === APLIKASI BANYU DIGITAL (statis, tidak perlu tool) ===
-Banyu Digital adalah aplikasi resmi PERUMDAM Tirta Darma Ayu Kabupaten Indramayu, tersedia gratis di Google Play Store. Fungsinya:
-1. Pengaduan online pelanggan (misal: air mati, air keruh, pipa bocor, dll).
-2. Pembayaran tagihan air.
-3. Cek tagihan.
-4. Monitoring/pemantauan penggunaan air pelanggan.
+Banyu Digital adalah aplikasi resmi PERUMDAM Tirta Darma Ayu di Google Play Store untuk:
+1. Pengaduan online pelanggan (air mati, air keruh, pipa bocor, dll).
+2. Pembayaran & cek tagihan air.
+3. Monitoring penggunaan air harian/bulanan.
 
-ATURAN ARAH JAWABAN untuk topik pengaduan/pembayaran/cek tagihan:
-- Jika user bertanya CARA melakukan pengaduan online, ATAU cara membayar tagihan → arahkan untuk mengunduh aplikasi **Banyu Digital** di Play Store, karena fitur itu paling lengkap tersedia di sana.
-- Jika user HANYA ingin cek tagihan saja → beri 2 opsi: (a) klik tombol "Cek Tagihan" di website, atau (b) gunakan aplikasi Banyu Digital.
-- Jika ada keluhan teknis air (mati/keruh/bocor) → arahkan ke fitur Pengaduan Online, baik lewat web (jika relevan) maupun aplikasi Banyu Digital.
+=== BAHASA & GAYA INTERAKSI (CERITAKAN DENGAN NATURAL) ===
+- Jawab dengan gaya **bercerita yang hangat, mengalir, dan ramah** seperti seorang asisten manusia sungguhan yang sedang mengobrol dengan warga Indramayu.
+- **SANGAT DILARANG COPY-PASTE FORMAT DATA MENTAH DARI DATABASE!** JANGAN PERNAH menampilkan format seperti:
+  ❌ "- Nama: H. Nurpan..."
+  ❌ "Jabatan: DIREKTUR UTAMA"
+  ❌ "Deskripsi/Profil/Riwayat: ..."
+- **Formatlah menjadi narasi percakapan yang menyenangkan**: Rangkum dan ceritakan kembali poin-poin pentingnya dengan kalimatmu sendiri secara mengalir! (Contoh: "Bapak H. Nurpan, S.E., M.Si. merupakan Direktur Utama PERUMDAM Tirta Darma Ayu. Beliau memulai pengabdiannya pada tanggal...")
+- Pahami Bahasa Indonesia dan Bahasa Indramayu (Ngoko & Krama).
 
-=== BAHASA ===
-Kamu WAJIB paham Bahasa Indonesia dan juga Bahasa Indramayu (dialek Jawa yang dipakai masyarakat Kabupaten Indramayu), yang punya 2 tingkatan:
-- **Ngoko**: bahasa sehari-hari, agak kasar/santai, umum dipakai anak muda.
-- **Krama**: bahasa halus/sopan, biasanya dipakai orang tua, sudah jarang dipakai tapi tetap harus dipahami.
-User mungkin mencampur Bahasa Indonesia dengan Bahasa Indramayu (ngoko/krama) dalam satu kalimat. Kamu harus tetap memahami maksudnya dan merespons secara natural — boleh sesekali membalas dengan sentuhan Bahasa Indramayu yang sopan agar terasa akrab dengan warga Indramayu, TAPI untuk data faktual (nama direktur, alamat, tanggal, dll) tetap sampaikan dalam Bahasa Indonesia yang jelas supaya tidak ambigu.
+=== TUGAS UTAMA (WAJIB panggil tool untuk data dinamis) ===
+- Profil Perusahaan, Ucapan Harapan & Terima Kasih, Visi-Misi -> get_company_profile
+- Sejarah Perusahaan per tahun -> get_company_history
+- Jajaran Direksi, Pemilik Modal, & Profil/Biodata/Deskripsi/Background Direksi -> get_directors
+- Lokasi Kantor Cabang & Instalasi Pengolahan Air (IPA) beserta Kapasitas Terpasang, Produksi, & Idle Capacity -> get_branches
+- Berita & Kegiatan Terbaru -> get_latest_news
+- Pengumuman Resmi Terbaru -> get_announcements
 
-=== TUGAS UTAMA (butuh tool/database) ===
-- Profil, sejarah, visi-misi Perumdam TDA → panggil tool get_company_profile. Contoh pemicu: "sejarah PDAM/Perumdam gimana", "ceritain awal mula perusahaan", "visi misi apa".
-- Jajaran direksi/pemilik modal → panggil tool get_directors. Contoh pemicu: "siapa direktur", "siapa pemilik modal".
-- Lokasi & jam kantor cabang → panggil tool get_branches. Contoh pemicu: "kantor cabang dimana", "alamat kantor", "jam operasional".
-- Berita/kegiatan terbaru → panggil tool get_latest_news. Contoh pemicu: "berita terbaru", "kegiatan apa aja", "ada info terkini gak".
-- Pengumuman resmi → panggil tool get_announcements. Contoh pemicu: "ada pengumuman gak", "info resmi terbaru".
-
-ATURAN KETAT (WAJIB DIPATUHI):
-1. Jawab ramah dan profesional. Boleh pakai emoji secukupnya.
-2. SELALU panggil tool yang relevan dulu untuk data faktual, sebelum menjawab. JANGAN pernah mengarang nama orang, alamat, telepon, atau tanggal.
-3. Kalau ada tool yang cocok dengan pertanyaan, WAJIB dipanggil — jangan menjawab dari asumsi sendiri.
-4. Kalau tool sudah dipanggil tapi datanya kosong, katakan jujur data belum tersedia — JANGAN mengarang.
-5. JANGAN PERNAH menjawab pertanyaan di luar topik Perumdam Tirta Darma Ayu (politik, resep masakan, coding, hiburan, tokoh publik lain, dll). Tolak dengan sopan dan arahkan kembali ke layanan Perumdam TDA.
-6. Jangan pernah mengaku sebagai OpenAI/ChatGPT/Groq/model AI tertentu. Kamu adalah Asisten Virtual Perumdam Tirta Darma Ayu.
-7. Jawaban singkat, padat, jelas. Hindari paragraf terlalu panjang.
+=== BOUNDARIES & ATURAN KETAT ===
+1. Kamu HANYA melayani pertanyaan seputar PERUMDAM Tirta Darma Ayu Kabupaten Indramayu.
+2. Tolak secara halus dan sopan jika ada pertanyaan di luar topik Perumdam TDA (seperti politik, coding umum, hiburan, resep masakan, dll).
+3. SELALU panggil tool yang sesuai untuk mengambil data aktual dari database. JANGAN PERNAH mengarang data, nama, angka, atau tanggal!
+4. DILARANG KERAS MENYEBUTKAN ATAU MENAMPILKAN TAG BAHASA KODING / TOOL / FUNCTION KEPADA PENGGUNA!
+   ❌ DILARANG MENULIS: `<function=get_branches></function>`, `tool`, `get_company_profile`, `database`, `API`, dll.
+   Bicara saja secara alami seperti manusia biasa tanpa membawa-bawa istilah teknis sistem komputer/kodingan!
+5. SANGAT PENTING SAAT MENJAWAB SEJARAH / PROFIL:
+   - Setiap kali user bertanya apa pun yang berkaitan dengan sejarah/perjalanan/awal mula perusahaan, kamu WAJIB memanggil tool get_company_history TERLEBIH DAHULU sebelum menjawab apa pun. TIDAK ADA PENGECUALIAN.
+   - Setelah tool merespons, WAJIB sebutkan minimal 3 tahun/peristiwa konkret dari hasil tool tersebut dalam jawabanmu (contoh: "Semuanya dimulai tahun 1932 saat..., lalu tahun 1978...").
+   - DILARANG KERAS menjawab dengan kalimat penutup generik seperti "Itulah sejarah singkat..." atau "...menjadi perusahaan yang modern dan profesional seperti sekarang" TANPA menyebutkan tahun & peristiwa konkret terlebih dahulu.
+   - Jika hasil tool get_company_history berbunyi "Data sejarah belum tersedia di database", kamu WAJIB menyampaikan PERSIS itu ke user secara jujur.
+6. Olah data dari database menjadi jawaban yang komunikatif, menarik, dan ramah. Jangan pernah copy-paste format data mentah database.
+7. Jika data dari tool tidak ditemukan / belum diinput admin, sampaikan secara jujur dengan kalimat santun bahwa informasi tersebut belum tersedia.
+8. Jangan pernah mengaku sebagai ChatGPT/OpenAI/Groq/LLM lain. Kamu adalah Asisten Virtual Perumdam TDA.
 PROMPT;
 
         $messages = array_merge(
@@ -77,7 +82,7 @@ PROMPT;
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_branches',
-                    'description' => 'Mendapatkan daftar semua kantor cabang Perumdam Tirta Darma Ayu beserta alamat, telepon, dan jam operasional.',
+                    'description' => 'Mendapatkan daftar kantor cabang dan Instalasi Pengolahan Air (IPA) Perumdam Tirta Darma Ayu, termasuk alamat, telepon, jam kerja, serta detail kapasitas terpasang, kapasitas produksi, dan idle capacity.',
                     'parameters' => ['type' => 'object', 'properties' => new \stdClass()],
                 ],
             ],
@@ -85,7 +90,7 @@ PROMPT;
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_latest_news',
-                    'description' => 'Mendapatkan berita atau kegiatan terbaru dari Perumdam Tirta Darma Ayu.',
+                    'description' => 'Mendapatkan berita atau kegiatan terbaru Perumdam Tirta Darma Ayu.',
                     'parameters' => ['type' => 'object', 'properties' => new \stdClass()],
                 ],
             ],
@@ -93,7 +98,7 @@ PROMPT;
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_announcements',
-                    'description' => 'Mendapatkan pengumuman resmi terbaru dari Perumdam Tirta Darma Ayu.',
+                    'description' => 'Mendapatkan pengumuman resmi terbaru Perumdam Tirta Darma Ayu.',
                     'parameters' => ['type' => 'object', 'properties' => new \stdClass()],
                 ],
             ],
@@ -101,7 +106,7 @@ PROMPT;
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_directors',
-                    'description' => 'Mendapatkan daftar direksi dan pemilik modal Perumdam Tirta Darma Ayu, termasuk nama dan jabatan.',
+                    'description' => 'Mendapatkan daftar Dewan Direksi dan Kuasa Pemilik Modal Perumdam Tirta Darma Ayu, termasuk nama, jabatan, serta riwayat/deskripsi/biodata/latar belakang masing-masing.',
                     'parameters' => ['type' => 'object', 'properties' => new \stdClass()],
                 ],
             ],
@@ -109,7 +114,15 @@ PROMPT;
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_company_profile',
-                    'description' => 'Mendapatkan profil perusahaan: sejarah, visi, dan misi Perumdam Tirta Darma Ayu.',
+                    'description' => 'Mendapatkan profil umum perusahaan: Sekilas PDAM, Ucapan Harapan & Terima Kasih (sambutan Dirut), Visi, dan Misi Perumdam Tirta Darma Ayu.',
+                    'parameters' => ['type' => 'object', 'properties' => new \stdClass()],
+                ],
+            ],
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'get_company_history',
+                    'description' => 'Mendapatkan perjalanan sejarah lengkap Perumdam Tirta Darma Ayu yang disusun per tahun/periode oleh admin (mulai tahun 1932 sampai sekarang).',
                     'parameters' => ['type' => 'object', 'properties' => new \stdClass()],
                 ],
             ],
@@ -120,9 +133,11 @@ PROMPT;
             return response()->json(['reply' => $reply]);
         } catch (\Exception $e) {
             Log::error('Chatbot error: ' . $e->getMessage());
+            
+            // Mengembalikan status 200 dengan pesan ramah agar tidak memicu error HTTP 500 di browser
             return response()->json([
-                'reply' => 'Maaf, saya sedang mengalami gangguan sistem sementara. Coba beberapa saat lagi, ya! 🙏'
-            ], 500);
+                'reply' => 'Mohon maaf, saat ini server asisten sedang mengalami kendala jaringan atau lalu lintas yang tinggi. Silakan coba kirim ulang pertanyaan Anda dalam beberapa detik ya! 🙏'
+            ], 200);
         }
     }
 
@@ -132,7 +147,7 @@ PROMPT;
             return 'Maaf, terjadi kendala saat memproses permintaan Anda. Silakan coba pertanyaan lain.';
         }
 
-        $response = Http::withToken(env('GROQ_API_KEY'))
+        $response = Http::withToken(config('services.groq.api_key'))
             ->timeout(45)
             ->retry(2, 500, throw: false)
             ->post('https://api.groq.com/openai/v1/chat/completions', [
@@ -172,7 +187,11 @@ PROMPT;
             return $this->askGroq($messages, $tools, $depth + 1);
         }
 
-        return $choice['content'] ?? 'Maaf, saya belum bisa memproses pertanyaan itu.';
+        $content = $choice['content'] ?? 'Maaf, saya belum bisa memproses pertanyaan itu.';
+        // Hapus tag <function=...></function> dari teks respons jika terikut dari LLM
+        $content = preg_replace('/<function=[^>]*>.*?<\/function>/s', '', $content);
+        $content = preg_replace('/<function=[^>]*>/s', '', $content);
+        return trim($content);
     }
 
     private function runTool(string $functionName): string
@@ -183,19 +202,34 @@ PROMPT;
             'get_announcements' => $this->getAnnouncementsData(),
             'get_directors' => $this->getDirectorsData(),
             'get_company_profile' => $this->getCompanyProfileData(),
+            'get_company_history' => $this->getCompanyHistoryData(),
             default => 'Data tidak ditemukan.',
         };
     }
 
     private function getBranchesData(): string
     {
-        $branches = Branch::orderByDesc('is_head_office')->get();
-        if ($branches->isEmpty()) return 'Data cabang belum tersedia.';
+        $branches = Branch::orderByDesc('is_head_office')->orderBy('type')->get();
+        if ($branches->isEmpty())
+            return 'Data cabang / IPA belum tersedia.';
 
-        $text = "Daftar Cabang Perumdam Tirta Darma Ayu:\n";
+        $text = "Daftar Kantor Cabang dan Instalasi Pengolahan Air (IPA) Perumdam Tirta Darma Ayu:\n";
         foreach ($branches as $b) {
-            $type = $b->is_head_office ? '[KANTOR PUSAT]' : '[KANTOR CABANG]';
-            $text .= "- {$type} {$b->name}. Alamat: {$b->address}. Telp: {$b->phone}. Jam: {$b->operational_hours}\n";
+            $typeTag = $b->is_head_office ? '[KANTOR PUSAT]' : ($b->type === 'ipa' ? '[IPA]' : '[KANTOR CABANG]');
+            $text .= "- {$typeTag} {$b->name}\n";
+            $text .= "  Alamat: " . ($b->address ?: '-') . "\n";
+            $text .= "  No. Telepon: " . ($b->phone ?: '-') . " | WA: " . ($b->whatsapp ?: '-') . "\n";
+            $text .= "  Jam Operasional: " . ($b->operational_hours ?: '-') . "\n";
+            if ($b->type === 'ipa' || $b->kapasitas_terpasang_text || $b->kapasitas_produksi || $b->idle_capacity) {
+                $text .= "  Spesifikasi Kapasitas IPA:\n";
+                if ($b->kapasitas_terpasang_text)
+                    $text .= "    * Kapasitas Terpasang: {$b->kapasitas_terpasang_text}\n";
+                if ($b->kapasitas_produksi)
+                    $text .= "    * Kapasitas Produksi: {$b->kapasitas_produksi} L/detik\n";
+                if ($b->idle_capacity)
+                    $text .= "    * Idle Capacity: {$b->idle_capacity} L/detik\n";
+            }
+            $text .= "\n";
         }
         return $text;
     }
@@ -208,11 +242,12 @@ PROMPT;
             ->take(5)
             ->get();
 
-        if ($news->isEmpty()) return 'Saat ini tidak ada berita terbaru.';
+        if ($news->isEmpty())
+            return 'Saat ini tidak ada berita terbaru.';
 
         $text = "5 Berita Terbaru:\n";
         foreach ($news as $n) {
-            $excerpt = str($n->content)->stripTags()->limit(150);
+            $excerpt = str($n->content)->stripTags()->limit(200);
             $text .= "- Judul: '{$n->title}'. Ringkasan: {$excerpt}. Tanggal: {$n->published_at->format('d M Y')}\n";
         }
         return $text;
@@ -221,11 +256,12 @@ PROMPT;
     private function getAnnouncementsData(): string
     {
         $announcements = Announcement::active()->latest()->take(5)->get();
-        if ($announcements->isEmpty()) return 'Saat ini tidak ada pengumuman resmi terbaru.';
+        if ($announcements->isEmpty())
+            return 'Saat ini tidak ada pengumuman resmi terbaru.';
 
         $text = "5 Pengumuman Resmi Terbaru:\n";
         foreach ($announcements as $a) {
-            $desc = str($a->description)->stripTags()->limit(150);
+            $desc = str($a->description)->stripTags()->limit(200);
             $text .= "- Judul: '{$a->title}'. Isi: {$desc}. Tanggal: {$a->created_at->format('d M Y')}\n";
         }
         return $text;
@@ -236,19 +272,27 @@ PROMPT;
         $direksi = Director::direksi()->orderBy('sort_order')->get();
         $pemilikModal = Director::pemilikModal()->orderBy('sort_order')->get();
 
-        $text = "Jajaran Direksi Perumdam Tirta Darma Ayu:\n";
+        $text = "Jajaran Direksi & Pejabat Perumdam Tirta Darma Ayu:\n";
         if ($direksi->isEmpty()) {
             $text .= "- Data direksi belum tersedia.\n";
         } else {
             foreach ($direksi as $d) {
-                $text .= "- {$d->name}, menjabat sebagai {$d->position}.\n";
+                $text .= "- Nama: {$d->name}\n  Jabatan: {$d->position}\n";
+                if ($d->description) {
+                    $descClean = str($d->description)->stripTags();
+                    $text .= "  Deskripsi/Profil/Riwayat: {$descClean}\n";
+                }
             }
         }
 
         if ($pemilikModal->isNotEmpty()) {
-            $text .= "\nPemilik Modal:\n";
+            $text .= "\nKuasa Pemilik Modal:\n";
             foreach ($pemilikModal as $p) {
-                $text .= "- {$p->name}, {$p->position}.\n";
+                $text .= "- Nama: {$p->name}\n  Jabatan: {$p->position}\n";
+                if ($p->description) {
+                    $descClean = str($p->description)->stripTags();
+                    $text .= "  Deskripsi/Profil/Riwayat: {$descClean}\n";
+                }
             }
         }
 
@@ -259,10 +303,28 @@ PROMPT;
     {
         $about = AboutUsContent::singleton();
 
-        $sejarah = $about->sejarah_text ? str($about->sejarah_text)->stripTags() : 'Belum tersedia.';
+        $sekilas = $about->sekilas_text ? str($about->sekilas_text)->stripTags() : 'Belum tersedia.';
+        $harapan = $about->harapan_text ? str($about->harapan_text)->stripTags() : 'Belum tersedia.';
         $visi = $about->visi_text ? str($about->visi_text)->stripTags() : 'Belum tersedia.';
         $misi = $about->misi_text ? str($about->misi_text)->stripTags() : 'Belum tersedia.';
 
-        return "Sejarah:\n{$sejarah}\n\nVisi:\n{$visi}\n\nMisi:\n{$misi}";
+        return "Sekilas PDAM/Perumdam:\n{$sekilas}\n\nUcapan Harapan & Terima Kasih (Sambutan Direktur Utama):\n{$harapan}\n\nVisi Perusahaan:\n{$visi}\n\nMisi Perusahaan:\n{$misi}";
+    }
+
+    private function getCompanyHistoryData(): string
+    {
+        $histories = \App\Models\HistoryItem::orderBy('sort_order', 'asc')->orderBy('id', 'asc')->get();
+
+        if ($histories->isEmpty()) {
+            return 'Data sejarah belum tersedia di database.';
+        }
+
+        $text = "Lini Masa Sejarah Perumdam Tirta Darma Ayu:\n";
+        foreach ($histories as $h) {
+            $title = $h->title ? " ({$h->title})" : "";
+            $text .= "- Tahun {$h->year}{$title}:\n  {$h->content}\n\n";
+        }
+
+        return $text;
     }
 }

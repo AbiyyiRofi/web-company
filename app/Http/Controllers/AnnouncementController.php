@@ -10,7 +10,7 @@ class AnnouncementController extends Controller
     public function index()
     {
         $header = PageHeader::get('pengumuman');
-        $announcements = Announcement::active()->latest()->paginate(10);
+        $announcements = Announcement::active()->latest()->get();
         return view('announcements.index', compact('header', 'announcements'));
     }
 }

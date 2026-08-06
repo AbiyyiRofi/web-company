@@ -52,6 +52,7 @@ Route::get('/pengadaan/dokumen/{document}/download', [ProcurementController::cla
 
 Route::get('/hubungi-kami', [BranchController::class, 'index'])->name('branches.index');
 Route::get('/hubungi-kami/data', [BranchController::class, 'json'])->name('branches.json');
+Route::get('/tentang-kami/sejarah-data', [AboutUsController::class, 'historyJson'])->name('history.json');
 
 Route::get('/karir', [KarirController::class, 'index'])->name('karir.index');
 Route::get('/pengaduan-online', [PengaduanOnlineController::class, 'index'])->name('pengaduan-online.index');
@@ -81,6 +82,7 @@ Route::prefix('portal-internal')->name('admin.')->group(function () {
         // Tentang Kami
         Route::get('about-us', [AdminAboutUsController::class, 'edit'])->name('about-us.edit');
         Route::post('about-us', [AdminAboutUsController::class, 'update'])->name('about-us.update');
+        Route::resource('history', \App\Http\Controllers\Admin\HistoryController::class)->except(['create', 'show', 'edit']);
         Route::get('directors', [DirectorController::class, 'index'])->name('directors.index');
         Route::post('directors', [DirectorController::class, 'store'])->name('directors.store');
         Route::post('directors/{director}', [DirectorController::class, 'update'])->name('directors.update');

@@ -17,8 +17,16 @@ class GalleryController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate(['title' => 'required|string|max:255']);
-        $gallery = Gallery::create(['user_id' => auth()->id(), 'title' => $data['title']]);
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|in:' . implode(',', array_keys(Gallery::CATEGORIES)),
+        ]);
+
+        $gallery = Gallery::create([
+            'user_id' => auth()->id(),
+            'title' => $data['title'],
+            'category' => $data['category'],
+        ]);
 
         return redirect()->route('admin.galleries.show', $gallery)->with('success', 'Album dibuat, sekarang tambahkan foto.');
     }

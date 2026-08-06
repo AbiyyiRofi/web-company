@@ -3,7 +3,7 @@
         ? $item->images->pluck('image_path')->map(fn($p) => asset('storage/'.$p))
         : ($item->cover_image ? [asset('storage/'.$item->cover_image)] : ['https://placehold.co/600x350/2563eb/white?text=PDAM+TDA']);
 @endphp
-<a href="{{ route('news.show', $item->slug) }}" class="group block bg-white rounded-xl border shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all">
+<a href="{{ route('news.show', $item->slug) }}" class="group block bg-white rounded-xl border shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all reveal">
     <div class="h-44 overflow-hidden auto-rotate-images" data-images='@json($imgs)'>
         <img class="rotate-img fade-img w-full h-full object-cover" src="{{ $imgs[0] }}">
     </div>

@@ -10,8 +10,9 @@ class Branch extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'address', 'phone', 'whatsapp',
+        'name', 'type', 'address', 'phone', 'whatsapp',
         'latitude', 'longitude', 'operational_hours', 'is_head_office',
+        'kapasitas_terpasang_text', 'kapasitas_produksi', 'idle_capacity',
     ];
 
     protected $casts = [
@@ -20,7 +21,16 @@ class Branch extends Model
         'longitude' => 'float',
     ];
 
-    // nomor buat tombol "Chat Sekarang" -> wa.me, dibersihin dari karakter non-digit
+    public function scopeCabang($query)
+    {
+        return $query->where('type', 'cabang');
+    }
+
+    public function scopeIpa($query)
+    {
+        return $query->where('type', 'ipa');
+    }
+
     public function getWhatsappLinkAttribute(): ?string
     {
         $number = $this->whatsapp ?: $this->phone;
