@@ -26,6 +26,8 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PengaduanOnlineController;
 use App\Http\Controllers\ProcurementController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ChatbotController;
 use Illuminate\Support\Facades\Route;
 
@@ -83,6 +85,7 @@ Route::prefix('portal-internal')->name('admin.')->group(function () {
         Route::get('about-us', [AdminAboutUsController::class, 'edit'])->name('about-us.edit');
         Route::post('about-us', [AdminAboutUsController::class, 'update'])->name('about-us.update');
         Route::resource('history', \App\Http\Controllers\Admin\HistoryController::class)->except(['create', 'show', 'edit']);
+        Route::resource('leadership-history', \App\Http\Controllers\Admin\LeadershipHistoryController::class)->except(['create', 'show', 'edit']);
         Route::get('directors', [DirectorController::class, 'index'])->name('directors.index');
         Route::post('directors', [DirectorController::class, 'store'])->name('directors.store');
         Route::post('directors/{director}', [DirectorController::class, 'update'])->name('directors.update');
@@ -150,5 +153,20 @@ Route::prefix('portal-internal')->name('admin.')->group(function () {
         Route::post('header-slides', [HeaderSlideController::class, 'store'])->name('header-slides.store');
         Route::delete('header-slides/{slide}', [HeaderSlideController::class, 'destroy'])->name('header-slides.destroy');
         Route::post('header-slides/{slide}/toggle', [HeaderSlideController::class, 'toggle'])->name('header-slides.toggle');
+
+        /*
+        |--------------------------------------------------------------------------
+        | FITUR EKSKLUSIF SUPER ADMIN
+        |--------------------------------------------------------------------------
+        */
+        Route::middleware(['role:superadmin'])->group(function () {
+            // Log Activity (Audit Trail)
+            Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+            Route::get('activity-logs/fetch', [ActivityLogController::class, 'fetchLogs'])->name('activity-logs.fetch');
+
+            // Kelola Admin / Users Management
+            Route::resource('users', UserManagementController::class)->except(['show']);
+            Route::post('users/{user}/toggle-status', [UserManagementController::class, 'toggleStatus'])->name('users.toggle-status');
+        });
     });
 });

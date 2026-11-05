@@ -27,7 +27,8 @@
                         <div class="absolute inset-0" id="catCover-{{ $cat['slug'] }}">
                             @forelse($cat['covers'] as $i => $cover)
                                 <img src="{{ asset('storage/'.$cover) }}"
-                                     class="cat-cover-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 {{ $i === 0 ? 'opacity-100' : 'opacity-0' }}">
+                                     class="cat-cover-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 {{ $i === 0 ? 'opacity-100' : 'opacity-0' }}"
+                                     loading="lazy" decoding="async">
                             @empty
                                 <div class="absolute inset-0 bg-slate-200"></div>
                             @endforelse
@@ -59,7 +60,7 @@
                 @foreach($cat['galleries'] as $g)
                     <button type="button" onclick="openAlbum({{ $g->id }})" class="group block text-left rounded-xl overflow-hidden border hover:shadow-lg transition-all relative h-56 reveal">
                         @if($g->photos->first())
-                            <img src="{{ asset('storage/'.$g->photos->first()->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img src="{{ asset('storage/'.$g->photos->first()->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
                         @else
                             <div class="w-full h-full bg-slate-100"></div>
                         @endif
@@ -122,6 +123,8 @@
         g.photos.forEach(function (url, i) {
             const img = document.createElement('img');
             img.src = url;
+            img.loading = 'lazy';
+            img.decoding = 'async';
             img.className = 'w-full rounded-lg cursor-pointer hover:opacity-90 transition break-inside-avoid';
             img.onclick = function () { openLightbox(g.photos, i); };
             wrap.appendChild(img);

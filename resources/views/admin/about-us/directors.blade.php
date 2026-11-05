@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'Dewan Direksi & Kuasa Pemilik Modal')
+@section('title', 'Jajaran Direksi & Kuasa Pemilik Modal')
 
 @section('content')
 <div class="grid lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2 space-y-4">
-        @foreach(['direksi' => 'Dewan Direksi', 'pemilik_modal' => 'Kuasa Pemilik Modal'] as $type => $label)
+        @foreach(['direksi' => 'Jajaran Direksi', 'pemilik_modal' => 'Kuasa Pemilik Modal'] as $type => $label)
             <h3 class="font-semibold text-lg mt-2">{{ $label }}</h3>
             @forelse($directors->where('type', $type) as $d)
                 <div class="bg-white rounded-xl border p-4 flex gap-4">
@@ -35,7 +35,7 @@
                 @csrf
 
                 <select name="type" class="w-full border rounded-lg px-3 py-2 text-sm">
-                    <option value="direksi">Dewan Direksi</option>
+                    <option value="direksi">Jajaran Direksi</option>
                     <option value="pemilik_modal">Kuasa Pemilik Modal</option>
                 </select>
                 <input type="text" name="name" id="fieldName" placeholder="Nama" class="w-full border rounded-lg px-3 py-2 text-sm" required>

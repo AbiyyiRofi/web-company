@@ -24,7 +24,7 @@
     <div class="bg-white rounded-xl border p-6">
         <h3 class="font-semibold mb-1">Ucapan Harapan &amp; Terima Kasih</h3>
         <p class="text-xs text-slate-400 mb-4">
-            Nama &amp; jabatan di bawah foto akan otomatis diambil dari Direktur Utama pada menu "Dewan Direksi" — tidak perlu diisi manual di sini.
+            Nama &amp; jabatan di bawah foto akan otomatis diambil dari Direktur Utama pada menu "Jajaran Direksi" — tidak perlu diisi manual di sini.
         </p>
         @if($content->harapan_photo)
             <img src="{{ asset('storage/'.$content->harapan_photo) }}" class="h-40 object-contain rounded-lg mb-3 bg-slate-50 p-2">

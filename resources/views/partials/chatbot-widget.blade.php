@@ -46,30 +46,31 @@
         <div id="chatbotTyping" class="hidden px-4 pb-2 text-xs text-slate-400 italic">Asisten sedang mengetik...</div>
 
         {{-- Template Quick Suggestions --}}
-        <div class="px-3 py-2 bg-slate-100/70 border-t border-slate-200 shrink-0">
-            <div class="text-[11px] font-semibold text-slate-500 mb-1.5 flex items-center gap-1">
-                <span>💡 Pertanyaan Cepat:</span>
+        <div class="px-3 py-2 bg-slate-100/70 dark:bg-slate-800/90 border-t border-slate-200 dark:border-slate-700/80 shrink-0">
+            <div class="text-[11px] font-semibold text-slate-500 dark:text-sky-300 mb-1.5 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-500 dark:text-sky-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                <span>Pertanyaan Cepat:</span>
             </div>
             <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-                <button type="button" data-action="cekTagihan" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-300 transition shadow-sm font-medium">
+                <button type="button" data-action="cekTagihan" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-100 hover:bg-primary-50 dark:hover:bg-primary-600 hover:text-primary-600 dark:hover:text-white hover:border-primary-300 dark:hover:border-primary-400 transition shadow-sm font-medium">
                     Cek Tagihan Air
                 </button>
-                <button type="button" data-action="pengaduan" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-300 transition shadow-sm font-medium">
+                <button type="button" data-action="pengaduan" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-100 hover:bg-primary-50 dark:hover:bg-primary-600 hover:text-primary-600 dark:hover:text-white hover:border-primary-300 dark:hover:border-primary-400 transition shadow-sm font-medium">
                     Cara Pengaduan Online
                 </button>
-                <button type="button" data-action="cabang" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-300 transition shadow-sm font-medium">
+                <button type="button" data-action="cabang" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-100 hover:bg-primary-50 dark:hover:bg-primary-600 hover:text-primary-600 dark:hover:text-white hover:border-primary-300 dark:hover:border-primary-400 transition shadow-sm font-medium">
                     Lokasi Kantor Cabang
                 </button>
-                <button type="button" data-action="sejarah" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-300 transition shadow-sm font-medium">
+                <button type="button" data-action="sejarah" class="quick-chip shrink-0 px-2.5 py-1 rounded-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-100 hover:bg-primary-50 dark:hover:bg-primary-600 hover:text-primary-600 dark:hover:text-white hover:border-primary-300 dark:hover:border-primary-400 transition shadow-sm font-medium">
                     Sejarah Perusahaan
                 </button>
             </div>
         </div>
 
         {{-- Form input --}}
-        <form id="chatbotForm" class="border-t border-slate-200 p-2.5 flex items-end gap-2 shrink-0 bg-white">
+        <form id="chatbotForm" class="border-t border-slate-200 dark:border-slate-700/80 p-2.5 flex items-end gap-2 shrink-0 bg-white dark:bg-slate-900">
             <textarea id="chatbotInput" rows="1" maxlength="1000" placeholder="Tulis pertanyaan seputar Perumdam TDA..."
-                class="flex-1 resize-none rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 max-h-24"></textarea>
+                class="flex-1 resize-none rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 max-h-24"></textarea>
             <button type="submit" id="chatbotSendBtn"
                 class="w-10 h-10 shrink-0 rounded-xl bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white flex items-center justify-center transition">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -209,13 +210,14 @@
             });
         });
 
-        // Kata kunci yang di-deteksi SEBELUM dikirim ke AI, biar 3 topik ini selalu konsisten
+        // Kata kunci yang di-deteksi SEBELUM dikirim ke AI, biar 4 topik ini selalu konsisten
         // jawabannya walau usernya ngetik manual (bukan klik tombol quick-chip)
         function detectShortcut(text) {
             const lower = text.toLowerCase();
             if (/(cek tagihan|bayar tagihan|tagihan air)/.test(lower)) return 'cekTagihan';
             if (/(pengaduan|lapor|komplain|keluhan)/.test(lower)) return 'pengaduan';
             if (/(sejarah|berdiri|awal mula|histori)/.test(lower)) return 'sejarah';
+            if (/(lokasi cabang|kantor cabang|alamat cabang|peta cabang|daftar cabang)/.test(lower)) return 'cabang';
             return null;
         }
 
@@ -236,6 +238,7 @@
             if (shortcut === 'cekTagihan') return showCekTagihanInfo(true);
             if (shortcut === 'pengaduan') return startLaporFlow(true);
             if (shortcut === 'sejarah') return startSejarahFlow(true);
+            if (shortcut === 'cabang') return showCabangList(true);
 
             setSending(true);
 
@@ -279,6 +282,36 @@
             if (state) messagesEl.scrollTop = messagesEl.scrollHeight;
         }
 
+        function formatFormattedText(text) {
+            if (!text) return '';
+
+            // 1. Escape HTML first for XSS security
+            let safe = String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+
+            // 2. Bold: **text**
+            safe = safe.replace(/\*\*(.*?)\*\*/gs, '<strong>$1</strong>');
+
+            // 3. Bold: *text* (WhatsApp style)
+            safe = safe.replace(/(?<!\w)\*([^\*\n]+)\*(?!\w)/g, '<strong>$1</strong>');
+
+            // 4. Italic: _text_
+            safe = safe.replace(/(?<!\w)_([^_\n]+)_(?!\w)/g, '<em>$1</em>');
+
+            // 5. Strikethrough: ~~text~~ or ~text~
+            safe = safe.replace(/~~(.*?)~~/gs, '<del>$1</del>');
+            safe = safe.replace(/(?<!\w)~([^~\n]+)~(?!\w)/g, '<del>$1</del>');
+
+            // 6. Inline Code: `text`
+            safe = safe.replace(/`([^`\n]+)`/g, '<code class="bg-slate-100 dark:bg-slate-700 px-1 py-0.5 rounded text-xs font-mono">$1</code>');
+
+            return safe;
+        }
+
         function addMessage(role, text, buttons) {
             const wrapper = document.createElement('div');
             wrapper.className = role === 'user' ? 'flex justify-end' : 'flex justify-start';
@@ -289,8 +322,13 @@
             const bubble = document.createElement('div');
             bubble.className = role === 'user'
                 ? 'bg-primary-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2 whitespace-pre-wrap break-words self-end'
-                : 'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-bl-sm px-3.5 py-2 whitespace-pre-wrap break-words shadow-sm';
-            bubble.textContent = text;
+                : 'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-bl-sm px-3.5 py-2 whitespace-pre-wrap break-words shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100';
+
+            if (role === 'user') {
+                bubble.textContent = text;
+            } else {
+                bubble.innerHTML = formatFormattedText(text);
+            }
             col.appendChild(bubble);
 
             if (buttons && buttons.length) {
@@ -302,19 +340,23 @@
                     const el = document.createElement(isLink ? 'a' : 'button');
                     if (isLink) {
                         el.href = btnData.href;
-                        el.target = '_blank';
-                        el.rel = 'noopener';
+                        el.target = btnData.target || '_blank';
+                        if (btnData.target !== '_self') {
+                            el.rel = 'noopener';
+                        }
                     } else {
                         el.type = 'button';
                     }
                     el.textContent = btnData.label;
-                    el.className = 'text-left text-sm font-medium px-3.5 py-2 rounded-xl border border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100 hover:border-primary-300 transition';
+                    el.className = 'text-left text-sm font-medium px-3.5 py-2 rounded-xl border border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100 hover:border-primary-300 transition dark:bg-slate-800 dark:border-sky-500/30 dark:text-sky-300 dark:hover:bg-slate-700 dark:hover:text-sky-200';
 
                     el.addEventListener('click', function () {
-                        Array.from(btnWrap.children).forEach(x => {
-                            if (x.tagName === 'BUTTON') x.disabled = true;
-                        });
-                        btnWrap.classList.add('opacity-50', 'pointer-events-none');
+                        if (!isLink) {
+                            Array.from(btnWrap.children).forEach(x => {
+                                if (x.tagName === 'BUTTON') x.disabled = true;
+                            });
+                            btnWrap.classList.add('opacity-50', 'pointer-events-none');
+                        }
                         if (btnData.onClick) btnData.onClick();
                     });
 
@@ -330,21 +372,21 @@
         }
 
         function showWelcomeMessage() {
-            addMessage('assistant', 'Halo! 👋 Saya Asisten Virtual PERUMDAM Tirta Darma Ayu. Mau aku bantu apa hari ini?', [
-                { label: '🛠️ Lapor Masalah / Pengaduan', onClick: startLaporFlow },
-                { label: '💬 Tanya-tanya Info Seputar Perumdam TDA', onClick: startTanyaFlow },
+            addMessage('assistant', 'Halo! Saya Asisten Virtual PERUMDAM Tirta Darma Ayu. Ada yang bisa saya bantu hari ini?', [
+                { label: 'Lapor Masalah / Pengaduan', onClick: startLaporFlow },
+                { label: 'Tanya Info Seputar Perumdam TDA', onClick: startTanyaFlow },
             ]);
         }
 
         // ===== JALUR PINTAS: Cek Tagihan (gak lewat AI, jawaban selalu tetap) =====
         function showCekTagihanInfo(skipUserBubble) {
-            if (!skipUserBubble) addMessage('user', '💳 Cek Tagihan Air');
+            if (!skipUserBubble) addMessage('user', 'Cek Tagihan Air');
             addMessage(
                 'assistant',
-                'Untuk cek & bayar tagihan air, paling gampang lewat tombol "Cek Tagihan" di website ini, atau lewat aplikasi Banyu Digital di HP kamu 📱',
+                'Untuk cek & bayar tagihan air, Anda dapat menggunakan tombol "Cek Tagihan" di website ini, atau melalui aplikasi Banyu Digital.',
                 [
-                    { label: '💳 Cek Tagihan Sekarang', href: CEK_TAGIHAN_URL },
-                    { label: '📲 Unduh Banyu Digital', href: BANYU_DIGITAL_URL },
+                    { label: 'Cek Tagihan Sekarang', href: CEK_TAGIHAN_URL },
+                    { label: 'Unduh Banyu Digital', href: BANYU_DIGITAL_URL },
                 ]
             );
         }
@@ -359,7 +401,7 @@
         }
 
         async function startLaporFlow(skipUserBubble) {
-            if (!skipUserBubble) addMessage('user', '🛠️ Lapor Masalah / Pengaduan');
+            if (!skipUserBubble) addMessage('user', 'Lapor Masalah / Pengaduan');
             setSending(true);
 
             try {
@@ -367,43 +409,43 @@
                 setSending(false);
 
                 if (cabang.length === 0) {
-                    addMessage('assistant', 'Untuk pengaduan online, kamu bisa langsung unduh aplikasi Banyu Digital di Play Store ya! 📱', [
-                        { label: '📲 Unduh Banyu Digital', href: BANYU_DIGITAL_URL }
+                    addMessage('assistant', 'Untuk pengaduan online, Anda dapat langsung mengunduh aplikasi Banyu Digital di Play Store.', [
+                        { label: 'Unduh Banyu Digital', href: BANYU_DIGITAL_URL }
                     ]);
                     return;
                 }
 
                 const branchButtons = cabang.map(function (b) {
-                    return { label: b.name, onClick: function () { selectBranch(b); } };
+                    return { label: b.name, onClick: function () { selectBranchForLapor(b); } };
                 });
 
                 addMessage(
                     'assistant',
-                    'Untuk pengaduan online, kamu bisa langsung unduh aplikasi Banyu Digital di Play Store ya! 📱\n\nKalau kamu mau tersambung ke petugas cabang terdekat, aku bisa bantu — kasih tau lokasi cabang/unit mana yang paling dekat sama kamu:',
+                    'Untuk pengaduan online, Anda dapat mengunduh aplikasi Banyu Digital di Play Store.\n\nJika ingin tersambung ke petugas cabang terdekat, silakan pilih kantor cabang/unit berikut:',
                     branchButtons
                 );
             } catch (err) {
                 setSending(false);
-                addMessage('assistant', 'Maaf, aku gagal ambil data cabang. Coba lagi ya, atau cek langsung halaman Hubungi Kami. 🙏');
+                addMessage('assistant', 'Maaf, sistem gagal mengambil data cabang. Silakan coba lagi atau cek halaman Hubungi Kami.');
                 console.error('Gagal fetch branches:', err);
             }
         }
 
-        function selectBranch(branch) {
+        function selectBranchForLapor(branch) {
             addMessage('user', branch.name);
 
             if (branch.whatsapp_link) {
-                addMessage('assistant', 'Kamu bisa langsung hubungi ' + branch.name + ' lewat WhatsApp berikut ya:', [
-                    { label: '💬 Hubungi Sekarang', href: branch.whatsapp_link }
+                addMessage('assistant', 'Anda dapat langsung menghubungi ' + branch.name + ' via WhatsApp:', [
+                    { label: 'Hubungi Sekarang', href: branch.whatsapp_link }
                 ]);
             } else {
-                addMessage('assistant', 'Maaf, nomor WhatsApp untuk ' + branch.name + ' belum tersedia di sistem kami. Kamu bisa cek halaman Hubungi Kami di website untuk info kontak lainnya ya. 🙏');
+                addMessage('assistant', 'Maaf, nomor WhatsApp untuk ' + branch.name + ' belum tersedia di sistem kami. Silakan cek halaman Hubungi Kami untuk informasi kontak lainnya.');
             }
         }
 
-        // ===== JALUR PINTAS: Lokasi Kantor Cabang (list langsung, tanpa embel-embel Banyu Digital) =====
-        async function showCabangList() {
-            addMessage('user', '📍 Lokasi Kantor Cabang');
+        // ===== JALUR PINTAS: Lokasi Kantor Cabang =====
+        async function showCabangList(skipUserBubble) {
+            if (!skipUserBubble) addMessage('user', 'Lokasi Kantor Cabang');
             setSending(true);
 
             try {
@@ -411,24 +453,49 @@
                 setSending(false);
 
                 if (cabang.length === 0) {
-                    addMessage('assistant', 'Data cabang belum tersedia saat ini. Coba cek halaman Hubungi Kami di website ya. 🙏');
+                    addMessage('assistant', 'Data cabang belum tersedia saat ini. Silakan cek halaman Hubungi Kami.');
                     return;
                 }
 
                 const branchButtons = cabang.map(function (b) {
-                    return { label: b.name, onClick: function () { selectBranch(b); } };
+                    return { label: b.name, onClick: function () { selectBranchLocation(b); } };
                 });
 
-                addMessage('assistant', 'Berikut daftar kantor cabang & unit Perumdam TDA, pilih salah satu buat lihat kontaknya:', branchButtons);
+                addMessage('assistant', 'Berikut daftar kantor cabang & unit Perumdam TDA. Pilih salah satu untuk melihat rincian lokasi:', branchButtons);
             } catch (err) {
                 setSending(false);
-                addMessage('assistant', 'Maaf, aku gagal ambil data cabang. Coba lagi ya. 🙏');
+                addMessage('assistant', 'Maaf, sistem gagal mengambil data cabang. Silakan coba lagi.');
             }
+        }
+
+        function selectBranchLocation(branch) {
+            addMessage('user', branch.name);
+
+            let msg = branch.name + '\n\nAlamat: ' + (branch.address || '-');
+            if (branch.operational_hours) {
+                msg += '\nJam Operasional: ' + branch.operational_hours;
+            }
+            if (branch.phone) {
+                msg += '\nTelepon: ' + branch.phone;
+            }
+            msg += '\n\nKlik tombol di bawah ini untuk melihat lokasinya di peta interaktif:';
+
+            const mapUrl = "{{ route('branches.index') }}?branch=" + branch.id;
+
+            const buttons = [
+                { label: 'Buka di Peta', href: mapUrl, target: '_self' }
+            ];
+
+            if (branch.whatsapp_link) {
+                buttons.push({ label: 'Chat WhatsApp', href: branch.whatsapp_link });
+            }
+
+            addMessage('assistant', msg, buttons);
         }
 
         // ===== JALUR PINTAS: Sejarah (pilih tahun dulu, baru cerita spesifik tahun itu) =====
         async function startSejarahFlow(skipUserBubble) {
-            if (!skipUserBubble) addMessage('user', '📜 Sejarah Perusahaan');
+            if (!skipUserBubble) addMessage('user', 'Sejarah Perusahaan');
             setSending(true);
 
             try {
@@ -439,7 +506,7 @@
                 setSending(false);
 
                 if (!cachedHistoryItems.length) {
-                    addMessage('assistant', 'Maaf, data sejarah perusahaan belum tersedia di sistem kami saat ini. 🙏');
+                    addMessage('assistant', 'Maaf, data sejarah perusahaan belum tersedia di sistem kami saat ini.');
                     return;
                 }
 
@@ -448,10 +515,10 @@
                     return { label: label, onClick: function () { showHistoryYear(h); } };
                 });
 
-                addMessage('assistant', 'Mau tahu sejarah Perumdam Tirta Darma Ayu di tahun berapa nih? Pilih salah satu ya 👇', yearButtons);
+                addMessage('assistant', 'Silakan pilih tahun sejarah Perumdam Tirta Darma Ayu yang ingin Anda lihat:', yearButtons);
             } catch (err) {
                 setSending(false);
-                addMessage('assistant', 'Maaf, aku gagal ambil data sejarah. Coba lagi ya. 🙏');
+                addMessage('assistant', 'Maaf, sistem gagal mengambil data sejarah. Silakan coba lagi.');
             }
         }
 
@@ -459,14 +526,14 @@
             const label = item.title ? (item.year + ' — ' + item.title) : ('Tahun ' + item.year);
             addMessage('user', label);
             addMessage('assistant', item.content, [
-                { label: '📜 Lihat tahun lainnya', onClick: startSejarahFlow }
+                { label: 'Lihat tahun lainnya', onClick: startSejarahFlow }
             ]);
         }
 
         // ===== JALUR AI: Tanya-tanya bebas =====
         function startTanyaFlow() {
-            addMessage('user', '💬 Tanya-tanya Info Seputar Perumdam TDA');
-            addMessage('assistant', 'Mau nanya-nanya seputar apa nih? Mari aku bantu 😊 (kamu bisa tanya soal direksi, profil perusahaan, atau berita terbaru — untuk sejarah, cek tagihan, atau pengaduan, ada tombol khusus di atas ya!)');
+            addMessage('user', 'Tanya Info Seputar Perumdam TDA');
+            addMessage('assistant', 'Ada informasi apa yang ingin Anda ketahui? (Anda dapat menanyakan seputar direksi, profil perusahaan, atau berita terbaru. Untuk informasi cek tagihan atau pengaduan, silakan gunakan tombol pertanyaan cepat di atas).');
             inputEl.focus();
         }
     })();

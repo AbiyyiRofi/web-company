@@ -21,16 +21,19 @@ class KarirPoster extends Model
     {
         $today = now()->toDateString();
         return $query
-            ->where(fn ($q) => $q->whereNull('start_date')->orWhere('start_date', '<=', $today))
-            ->where(fn ($q) => $q->whereNull('end_date')->orWhere('end_date', '>=', $today));
+            ->where(fn($q) => $q->whereNull('start_date')->orWhere('start_date', '<=', $today))
+            ->where(fn($q) => $q->whereNull('end_date')->orWhere('end_date', '>=', $today));
     }
 
     public function getStatusAttribute(): string
     {
-        if ($this->trashed()) return 'Dihapus';
+        if ($this->trashed())
+            return 'Dihapus';
         $today = now()->toDateString();
-        if ($this->start_date && $this->start_date->toDateString() > $today) return 'Terjadwal';
-        if ($this->end_date && $this->end_date->toDateString() < $today) return 'Kadaluarsa';
+        if ($this->start_date && $this->start_date->toDateString() > $today)
+            return 'Terjadwal';
+        if ($this->end_date && $this->end_date->toDateString() < $today)
+            return 'Kadaluarsa';
         return 'Aktif';
     }
 }

@@ -13,7 +13,10 @@ class KarirController extends Controller
     public function edit()
     {
         $content = KarirContent::singleton();
-        $posters = KarirPoster::latest()->get();
+        // Hanya ambil poster yang Aktif atau Terjadwal untuk daftar "Poster Saat Ini"
+        $posters = KarirPoster::latest()->get()
+            ->filter(fn ($p) => in_array($p->status, ['Aktif', 'Terjadwal']))
+            ->values();
         return view('admin.karir.edit', compact('content', 'posters'));
     }
 

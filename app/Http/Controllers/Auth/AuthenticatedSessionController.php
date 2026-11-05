@@ -37,6 +37,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if ($user = Auth::user()) {
+            \App\Models\ActivityLog::record('logout', 'Auth', "Pengguna \"{$user->name}\" ({$user->email}) telah logout dari portal admin.", null, $user);
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

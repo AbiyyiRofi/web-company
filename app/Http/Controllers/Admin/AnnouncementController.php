@@ -11,7 +11,11 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
-        $announcements = Announcement::latest()->paginate(10);
+        // Hanya ambil pengumuman Aktif/Terjadwal untuk halaman utama admin pengumuman
+        $announcements = Announcement::latest()->get()
+            ->filter(fn ($a) => in_array($a->status, ['Aktif', 'Terjadwal']))
+            ->values();
+
         return view('admin.announcements.index', compact('announcements'));
     }
 

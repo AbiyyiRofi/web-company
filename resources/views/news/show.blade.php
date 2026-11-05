@@ -26,7 +26,8 @@
                 @foreach($item->images as $i => $img)
                     <img src="{{ asset('storage/'.$img->image_path) }}"
                          class="snap-center shrink-0 w-[92%] sm:w-full max-h-[520px] object-contain bg-slate-100 rounded-xl cursor-pointer hover:opacity-95 transition"
-                         onclick="openLightbox(@json($imgUrls), {{ $i }})">
+                         onclick="openLightbox(@json($imgUrls), {{ $i }})"
+                         loading="lazy" decoding="async">
                 @endforeach
             </div>
             @if($item->images->count() > 1)
@@ -54,7 +55,7 @@
         @foreach($related as $r)
             @php $rImg = $r->cover_image ? asset('storage/'.$r->cover_image) : 'https://placehold.co/600x350/2563eb/white?text=PDAM+TDA'; @endphp
             <a href="{{ route('news.show', $r->slug) }}" class="group block bg-white rounded-xl border shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all reveal">
-                <img src="{{ $rImg }}" class="w-full h-40 object-cover">
+                <img src="{{ $rImg }}" class="w-full h-40 object-cover" loading="lazy" decoding="async">
                 <div class="p-4">
                     <h3 class="font-semibold text-sm line-clamp-2 group-hover:text-primary-700 transition">{{ $r->title }}</h3>
                 </div>

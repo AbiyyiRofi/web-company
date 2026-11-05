@@ -32,7 +32,8 @@
                         @if($ann->image)
                             <img src="{{ asset('storage/'.$ann->image) }}"
                                  onclick="openLightbox(['{{ asset('storage/'.$ann->image) }}'], 0)"
-                                 class="w-full rounded-xl cursor-pointer hover:opacity-95 transition">
+                                 class="w-full rounded-xl cursor-pointer hover:opacity-95 transition"
+                                 loading="lazy" decoding="async">
                         @endif
                     </div>
                 </div>

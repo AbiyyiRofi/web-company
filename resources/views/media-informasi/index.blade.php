@@ -70,7 +70,7 @@
                     <a href="{{ route('news.show', $featuredNews->slug) }}" class="group block">
                         <div class="rounded-2xl overflow-hidden h-64 sm:h-96 bg-slate-100">
                             <img src="{{ $featuredImg }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" decoding="async">
                         </div>
                         <span class="inline-block mt-4 text-xs font-bold text-primary-600 uppercase tracking-wide">Perumdam TDA
                             News</span>
@@ -97,7 +97,7 @@
                         <a href="{{ route('news.show', $item->slug) }}" class="group flex gap-3 py-4 first:pt-0 reveal">
                             <div class="w-20 h-16 sm:w-24 sm:h-20 shrink-0 rounded-lg overflow-hidden bg-slate-100">
                                 <img src="{{ $sideImg }}"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" decoding="async">
                             </div>
                             <div class="min-w-0">
                                 <span class="text-[11px] font-bold text-primary-600 uppercase tracking-wide">Perumdam TDA
@@ -124,9 +124,11 @@
             @forelse($latestAnnouncements as $ann)
                 <a href="{{ route('announcements.index') }}" class="flex items-center gap-4 p-5 hover:bg-slate-50 transition">
                     @if($ann->image)
-                        <img src="{{ asset('storage/' . $ann->image) }}" class="w-16 h-16 rounded-lg object-cover shrink-0">
+                        <img src="{{ asset('storage/' . $ann->image) }}" class="w-16 h-16 rounded-lg object-cover shrink-0" loading="lazy" decoding="async">
                     @else
-                        <div class="w-16 h-16 rounded-lg bg-primary-50 flex items-center justify-center text-2xl shrink-0">📢</div>
+                        <div class="w-16 h-16 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c.41 0 .789-.244.945-.623l.775-1.938a1.5 1.5 0 012.796.885v10.354a1.5 1.5 0 01-2.796.885l-.775-1.938a1.002 1.002 0 00-.945-.623H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                        </div>
                     @endif
                     <div class="min-w-0">
                         <div class="font-medium truncate">{{ $ann->title }}</div>
@@ -149,7 +151,7 @@
                     class="group block rounded-xl overflow-hidden border hover:shadow-lg transition-all relative h-48 reveal">
                     @if($g->photos->first())
                         <img src="{{ asset('storage/' . $g->photos->first()->image_path) }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
                     @else
                         <div class="w-full h-full bg-slate-100"></div>
                     @endif

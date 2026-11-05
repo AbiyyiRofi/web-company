@@ -13,7 +13,8 @@
         @forelse ($gallery->photos as $i => $photo)
             <img src="{{ asset('storage/'.$photo->image_path) }}"
                  onclick="openLightbox(@json($allUrls), {{ $i }})"
-                 class="w-full rounded-lg cursor-pointer hover:opacity-90 transition break-inside-avoid reveal">
+                 class="w-full rounded-lg cursor-pointer hover:opacity-90 transition break-inside-avoid reveal"
+                 loading="lazy" decoding="async">
         @empty
             <p class="text-slate-500 reveal">Belum ada foto di album ini.</p>
         @endforelse

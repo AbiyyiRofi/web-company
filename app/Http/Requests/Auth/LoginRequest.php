@@ -44,10 +44,27 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
+            \App\Models\ActivityLog::record('login_failed', 'Auth', 'Percobaan login gagal untuk email: ' . $this->string('email'));
+
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
+
+        $user = Auth::user();
+
+        if (! $user->isActive()) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            \App\Models\ActivityLog::record('login_blocked', 'Auth', "Percobaan login ditolak untuk akun nonaktif: {$user->name} ({$user->email})", null, $user);
+
+            throw ValidationException::withMessages([
+                'email' => 'Akun Anda telah dinonaktifkan oleh Super Admin. Silakan hubungi administrator.',
+            ]);
+        }
+
+        \App\Models\ActivityLog::record('login', 'Auth', "Pengguna \"{$user->name}\" ({$user->email}) berhasil login ke portal internal.", null, $user);
 
         RateLimiter::clear($this->throttleKey());
     }

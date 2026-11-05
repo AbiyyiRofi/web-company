@@ -31,7 +31,7 @@
                 class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-600 to-blue-400 p-10 sm:p-14 text-white reveal">
                 <div class="relative z-10 max-w-md">
                     <div class="flex items-center gap-2 mb-4">
-                        <span class="text-3xl">💧</span>
+                        <svg class="w-8 h-8 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
                         <div class="font-bold leading-tight">PERUMDA AIR MINUM<br>TIRTA DARMA AYU</div>
                     </div>
                     <p class="text-blue-100 mb-2">Kelola Layanan Air Lebih Mudah dengan</p>
@@ -39,13 +39,16 @@
                     <p class="text-blue-100 mb-8">Cepat, Praktis, dan Terpercaya</p>
                     <div class="grid grid-cols-3 gap-4 mb-4 text-center text-xs">
                         <div>
-                            <div class="text-2xl mb-1">💧</div>Cek Tagihan
+                            <div class="w-8 h-8 mx-auto mb-1 flex items-center justify-center"><svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+                            Cek Tagihan
                         </div>
                         <div>
-                            <div class="text-2xl mb-1">📊</div>Pantau Pemakaian
+                            <div class="w-8 h-8 mx-auto mb-1 flex items-center justify-center"><svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+                            Pantau Pemakaian
                         </div>
                         <div>
-                            <div class="text-2xl mb-1">💬</div>Lapor &amp; Pengaduan
+                            <div class="w-8 h-8 mx-auto mb-1 flex items-center justify-center"><svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div>
+                            Lapor &amp; Pengaduan
                         </div>
                     </div>
                 </div>

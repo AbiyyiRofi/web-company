@@ -1,14 +1,40 @@
-<div id="route-loader"
-    style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:#ffffff;transition:opacity .3s ease,visibility .3s ease;">
-    <svg width="56" height="56" viewBox="0 0 50 50" style="animation:route-loader-spin 0.9s linear infinite;">
-        <circle cx="25" cy="25" r="20" fill="none" stroke="#dbeafe" stroke-width="5"></circle>
-        <circle cx="25" cy="25" r="20" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round"
+<div id="route-loader" class="transition-all duration-300">
+    <svg width="56" height="56" viewBox="0 0 50 50" class="loader-spinner" style="animation:route-loader-spin 0.9s linear infinite;">
+        <circle class="circle-bg" cx="25" cy="25" r="20" fill="none" stroke="#dbeafe" stroke-width="5"></circle>
+        <circle class="circle-accent" cx="25" cy="25" r="20" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round"
             stroke-dasharray="90 40"></circle>
     </svg>
-    <span style="font-family:ui-sans-serif,system-ui,sans-serif;font-size:.95rem;color:#475569;">Memuat...</span>
+    <span class="loader-text" style="font-family:ui-sans-serif,system-ui,sans-serif;font-size:.95rem;color:#475569;">Memuat...</span>
 </div>
 
 <style>
+    #route-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+        background: #ffffff;
+        transition: opacity .3s ease, visibility .3s ease, background-color .2s ease;
+    }
+
+    /* Support Dark Mode untuk Loading Screen */
+    html.dark #route-loader {
+        background: #090d16 !important;
+    }
+    html.dark #route-loader .circle-bg {
+        stroke: #1e293b !important;
+    }
+    html.dark #route-loader .circle-accent {
+        stroke: #38bdf8 !important;
+    }
+    html.dark #route-loader .loader-text {
+        color: #94a3b8 !important;
+    }
+
     @keyframes route-loader-spin {
         to {
             transform: rotate(360deg);

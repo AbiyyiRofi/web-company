@@ -1,7 +1,168 @@
-// History Timeline Slider - Pertamina Style
-// Handles auto-play, progress indicator per year, year button switching, and responsive layout for mobile, tablet, desktop
+// History Timeline Slider - Pertamina Style & Leadership History Carousel
+// Handles auto-play, progress indicator per year, year button switching, and leadership history carousel
 
 document.addEventListener('DOMContentLoaded', function () {
+    // -------------------------------------------------------------
+    // 1. LEADERSHIP HISTORY COVERFLOW SLIDER (Sejarah Direksi Masa Jabatan)
+    // -------------------------------------------------------------
+    const coverflowTrack = document.getElementById('leadershipCoverflowTrack');
+    const leadershipPrevBtn = document.getElementById('leadershipPrevBtn');
+    const leadershipNextBtn = document.getElementById('leadershipNextBtn');
+
+    if (coverflowTrack) {
+        const cards = Array.from(coverflowTrack.querySelectorAll('.leadership-coverflow-card'));
+        const nameEl = document.getElementById('activeDirectorName');
+        const periodEl = document.getElementById('activeDirectorPeriod');
+        const posEl = document.getElementById('activeDirectorPosition');
+
+        let activeIndex = 0;
+        let leadInterval = null;
+        const autoPlayDuration = 5000; // 5 detik
+
+        function updateCoverflow() {
+            if (cards.length === 0) return;
+
+            const count = cards.length;
+            const isMobile = window.innerWidth < 640;
+
+            cards.forEach((card, i) => {
+                // Hitung offset relatif dari activeIndex (infinite loop offset)
+                let offset = (i - activeIndex) % count;
+                if (offset > count / 2) offset -= count;
+                if (offset < -count / 2) offset += count;
+
+                const absOffset = Math.abs(offset);
+                const imgWrapper = card.querySelector('.card-img-wrapper');
+
+                if (offset === 0) {
+                    // KARTU UTAMA (TENGAH) - Paling besar & terang
+                    card.style.transform = `translateX(0px) translateZ(0px)`;
+                    card.style.zIndex = '30';
+                    card.style.opacity = '1';
+                    card.style.visibility = 'visible';
+                    if (imgWrapper) {
+                        imgWrapper.style.transform = 'scale(1)';
+                        imgWrapper.style.filter = 'brightness(1)';
+                        imgWrapper.style.boxShadow = '0 20px 30px -5px rgba(0, 0, 0, 0.3)';
+                    }
+
+                    // Update Text Info di bawah
+                    if (nameEl) nameEl.textContent = card.dataset.name || '';
+                    if (periodEl) periodEl.textContent = card.dataset.period || '';
+                    if (posEl) posEl.textContent = card.dataset.position || '';
+
+                    // Posisi Tombol Panah Kiri & Kanan pas di tepi kartu tengah (seperti Gambar 2)
+                    if (leadershipPrevBtn && leadershipNextBtn) {
+                        const cardWidth = isMobile ? 170 : (window.innerWidth < 768 ? 220 : 260);
+                        const btnOffset = (cardWidth / 2) - 16;
+                        leadershipPrevBtn.style.transform = `translate(-${btnOffset}px, -50%)`;
+                        leadershipNextBtn.style.transform = `translate(${btnOffset}px, -50%)`;
+                    }
+                } else if (absOffset <= 4) {
+                    // KARTU SAMPING (Terpisah rapih dengan gap formal, mengecil bergradasi seperti Gambar 2)
+                    const direction = offset > 0 ? 1 : -1;
+                    let translateX = 0;
+                    if (absOffset === 1) translateX = direction * (isMobile ? 130 : 260);
+                    else if (absOffset === 2) translateX = direction * (isMobile ? 220 : 470);
+                    else if (absOffset === 3) translateX = direction * (isMobile ? 300 : 640);
+                    else translateX = direction * (isMobile ? 370 : 780);
+
+                    const scale = Math.max(0.4, 1 - absOffset * 0.18);
+                    const opacity = Math.max(0.15, 1 - absOffset * 0.28);
+                    const zIndex = 30 - absOffset * 5;
+
+                    card.style.transform = `translateX(${translateX}px)`;
+                    card.style.zIndex = zIndex;
+                    card.style.opacity = opacity;
+                    card.style.visibility = 'visible';
+                    if (imgWrapper) {
+                        imgWrapper.style.transform = `scale(${scale})`;
+                        imgWrapper.style.filter = `brightness(${Math.max(0.7, 1 - absOffset * 0.1)})`;
+                        imgWrapper.style.boxShadow = 'none';
+                    }
+                } else {
+                    // KARTU DILUAR JANGKAUAN (SEMBUNYIKAN)
+                    card.style.transform = `translateX(${offset * 300}px)`;
+                    card.style.zIndex = '0';
+                    card.style.opacity = '0';
+                    card.style.visibility = 'hidden';
+                }
+            });
+        }
+
+        function goToIndex(idx) {
+            if (cards.length === 0) return;
+            activeIndex = (idx + cards.length) % cards.length;
+            updateCoverflow();
+        }
+
+        function nextSlide() {
+            goToIndex(activeIndex + 1);
+        }
+
+        function prevSlide() {
+            goToIndex(activeIndex - 1);
+        }
+
+        function startAutoPlay() {
+            stopAutoPlay();
+            leadInterval = setInterval(nextSlide, autoPlayDuration);
+        }
+
+        function stopAutoPlay() {
+            if (leadInterval) {
+                clearInterval(leadInterval);
+                leadInterval = null;
+            }
+        }
+
+        // Click card to center
+        cards.forEach((card, idx) => {
+            card.addEventListener('click', () => {
+                stopAutoPlay();
+                goToIndex(idx);
+                startAutoPlay();
+            });
+        });
+
+        if (leadershipPrevBtn) {
+            leadershipPrevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                stopAutoPlay();
+                prevSlide();
+                startAutoPlay();
+            });
+        }
+
+        if (leadershipNextBtn) {
+            leadershipNextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                stopAutoPlay();
+                nextSlide();
+                startAutoPlay();
+            });
+        }
+
+        // Pause on hover
+        coverflowTrack.addEventListener('mouseenter', stopAutoPlay);
+        coverflowTrack.addEventListener('mouseleave', startAutoPlay);
+
+        // Responsive adjustment on resize
+        window.addEventListener('resize', updateCoverflow);
+
+        // Global trigger function to sync with annual history timeline
+        window.syncLeadershipToIndex = function(idx) {
+            goToIndex(idx);
+        };
+
+        // Initialize
+        updateCoverflow();
+        startAutoPlay();
+    }
+
+    // -------------------------------------------------------------
+    // 2. ANNUAL HISTORY SLIDER (Sejarah Perusahaan Per Tahun)
+    // -------------------------------------------------------------
     const container = document.getElementById('historySlider');
     if (!container) return;
 
@@ -49,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const yearBtns = Array.from(labelsWrap.querySelectorAll('.history-year-btn'));
     const prevBtn = document.getElementById('historyPrevBtn');
     const nextBtn = document.getElementById('historyNextBtn');
-    const buttonsTrack = document.getElementById('historyButtonsTrack');
 
     yearBtns.forEach((btn, i) => {
         btn.addEventListener('click', () => {
@@ -82,19 +242,16 @@ document.addEventListener('DOMContentLoaded', function () {
         yearBtns.forEach((btn, i) => {
             const txt = btn.querySelector('.history-year-text');
             if (isMobile) {
-                // Mobile: toggle active item highlight & scroll active item into view
                 if (i === activeIndex) {
                     btn.classList.remove('hidden');
                     btn.classList.add('block');
                     txt.classList.remove('text-white/60');
                     txt.classList.add('text-white', 'scale-105', 'font-black');
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 } else {
                     txt.classList.remove('text-white', 'scale-105', 'font-black');
                     txt.classList.add('text-white/60');
                 }
             } else {
-                // Desktop / Tablet: show all side-by-side
                 btn.classList.remove('hidden');
                 btn.classList.add('block');
                 if (i === activeIndex) {
@@ -130,6 +287,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updateResponsiveView(index);
 
+        if (typeof window.syncLeadershipToIndex === 'function') {
+            window.syncLeadershipToIndex(index);
+        }
+
         elapsed = 0;
         const duration = parseFloat(slides[index].dataset.duration || defaultDuration);
         clearInterval(progressInterval);
@@ -148,6 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100);
     }
 
-    // Initialize first slide (awal menampilkan tahun paling pertama terlebih dahulu)
+    // Initialize first slide
     showSlide(0);
 });

@@ -19,10 +19,58 @@
 
     <section id="sekilas" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-20">
         <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 reveal">Sekilas PDAM</h2>
-        <div class="prose max-w-none text-slate-600 leading-relaxed text-justify reveal">
-            {!! nl2br(e($content->sekilas_text)) ?: '<p class="text-slate-400 italic">Belum ada konten.</p>' !!}
+        <div class="prose max-w-none text-slate-600 leading-relaxed text-justify reveal whitespace-pre-line">
+            {!! $content->sekilas_text ? Str::inlineMarkdown(e($content->sekilas_text)) : '<p class="text-slate-400 italic">Belum ada konten.</p>' !!}
         </div>
     </section>
+
+    {{-- ===== SEJARAH KEPEMIMPINAN (COVERFLOW 3D PERSPECTIVE SLIDER) ===== --}}
+    @if($leadershipHistories->count())
+    <section id="sejarah-kepemimpinan" class="py-16 sm:py-20 bg-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-8">
+            <span class="text-xs sm:text-sm font-bold uppercase tracking-widest text-sky-500">KEPEMIMPINAN PERUMDAM TDA</span>
+            <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-1 tracking-tight">Sejarah Direksi Masa Jabatan</h2>
+            <p class="text-slate-500 text-sm sm:text-base mt-2">Jejak kepemimpinan Direktur Perumdam Tirta Darma Ayu dari periode ke periode</p>
+        </div>
+
+        {{-- 3D Coverflow Container --}}
+        <div class="relative w-full max-w-7xl mx-auto min-h-[460px] sm:min-h-[520px] flex flex-col items-center justify-center overflow-hidden py-4 select-none">
+            {{-- Slider Track --}}
+            <div id="leadershipCoverflowTrack" class="relative w-full h-[360px] sm:h-[420px] flex items-center justify-center">
+                {{-- Prev / Next Navigation Controls Overlaying the center card edges --}}
+                <button type="button" id="leadershipPrevBtn" aria-label="Sebelumnya"
+                    class="absolute z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black hover:bg-slate-800 text-white flex items-center justify-center shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer border border-white/20">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+
+                <button type="button" id="leadershipNextBtn" aria-label="Berikutnya"
+                    class="absolute z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black hover:bg-slate-800 text-white flex items-center justify-center shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer border border-white/20">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+
+                @foreach($leadershipHistories as $index => $item)
+                    <div class="leadership-coverflow-card absolute top-0 transition-all duration-500 ease-out cursor-pointer flex flex-col items-center"
+                        data-index="{{ $index }}"
+                        data-name="{{ $item->name }}"
+                        data-period="{{ $item->period }}"
+                        data-position="{{ $item->position ?: 'Direktur Utama' }}">
+                        <div class="card-img-wrapper w-[170px] h-[230px] sm:w-[220px] sm:h-[300px] md:w-[260px] md:h-[350px] rounded-none overflow-hidden bg-slate-200 border border-slate-300 shadow-xl transition-all duration-500">
+                            <img src="{{ $item->photo ? asset('storage/' . $item->photo) : 'https://placehold.co/400x500/e2e8f0/64748b?text=Foto' }}"
+                                class="w-full h-full object-cover" loading="lazy" decoding="async">
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- Active Director Info Text Below Center Card --}}
+            <div class="mt-6 text-center z-30 transition-all duration-300">
+                <h3 id="activeDirectorName" class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight uppercase"></h3>
+                <p id="activeDirectorPeriod" class="text-slate-900 font-bold text-lg sm:text-2xl mt-1"></p>
+                <p id="activeDirectorPosition" class="text-sky-600 font-semibold text-xs sm:text-sm mt-0.5"></p>
+            </div>
+        </div>
+    </section>
+    @endif
 
     {{-- ===== SEJARAH (PER TAMBAHAN ADMIN - PERTAMINA STYLE TIMELINE SLIDER) ===== --}}
     <section id="sejarah" class="relative py-16 sm:py-24 overflow-hidden scroll-mt-20 min-h-[500px] sm:min-h-[580px] flex flex-col justify-between bg-slate-900">
@@ -55,7 +103,7 @@
                             {{ $history->title ?: 'Perjalanan Sejarah ' . $history->year }}
                         </h3>
                         <p class="text-slate-200 text-sm sm:text-lg leading-relaxed sm:leading-loose whitespace-pre-line drop-shadow">
-                            {{ $history->content }}
+                            {!! Str::inlineMarkdown(e($history->content)) !!}
                         </p>
                     </div>
                 </div>
@@ -78,29 +126,29 @@
         <div class="grid sm:grid-cols-2 gap-6 items-start">
             <div class="bg-primary-100 rounded-2xl p-8 hover:shadow-lg transition reveal">
                 <div class="text-primary-600 font-bold text-lg mb-3">Visi</div>
-                <div class="text-slate-600 leading-relaxed">
-                    {!! nl2br(e($content->visi_text)) ?: '<span class="text-slate-400 italic">Belum ada konten.</span>' !!}
+                <div class="text-slate-600 leading-relaxed whitespace-pre-line">
+                    {!! $content->visi_text ? Str::inlineMarkdown(e($content->visi_text)) : '<span class="text-slate-400 italic">Belum ada konten.</span>' !!}
                 </div>
             </div>
             <div class="bg-primary-100 rounded-2xl p-8 hover:shadow-lg transition reveal">
                 <div class="text-primary-600 font-bold text-lg mb-3">Misi</div>
-                <div class="text-slate-600 leading-relaxed">
-                    {!! nl2br(e($content->misi_text)) ?: '<span class="text-slate-400 italic">Belum ada konten.</span>' !!}
+                <div class="text-slate-600 leading-relaxed whitespace-pre-line">
+                    {!! $content->misi_text ? Str::inlineMarkdown(e($content->misi_text)) : '<span class="text-slate-400 italic">Belum ada konten.</span>' !!}
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="struktur" class="bg-white py-16 scroll-mt-20">
+    <section id="struktur" class="py-16 scroll-mt-20">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 reveal">Struktur Organisasi</h2>
-            <div class="prose max-w-none text-slate-600 leading-relaxed mb-8 reveal">
-                {!! nl2br(e($content->struktur_text)) ?: '<p class="text-slate-400 italic">Belum ada konten.</p>' !!}
+            <div class="prose max-w-none text-slate-600 leading-relaxed mb-8 reveal whitespace-pre-line">
+                {!! $content->struktur_text ? Str::inlineMarkdown(e($content->struktur_text)) : '<p class="text-slate-400 italic">Belum ada konten.</p>' !!}
             </div>
             @if($content->struktur_image)
                 <img src="{{ asset('storage/' . $content->struktur_image) }}"
                     onclick="openLightbox(['{{ asset('storage/' . $content->struktur_image) }}'], 0)"
-                    class="w-full rounded-xl border cursor-pointer hover:opacity-90 transition reveal">
+                    class="w-full rounded-xl border cursor-pointer hover:opacity-90 transition reveal" loading="lazy" decoding="async">
             @endif
         </div>
     </section>
@@ -115,7 +163,7 @@
                         class="flex flex-col sm:flex-row bg-white border rounded-2xl overflow-hidden hover:shadow-lg transition-all reveal">
                         <div class="w-full h-56 sm:h-auto sm:w-56 shrink-0 overflow-hidden bg-slate-100">
                             <img src="{{ $d->photo ? asset('storage/' . $d->photo) : 'https://placehold.co/400x500/e2e8f0/64748b?text=Foto' }}"
-                                class="w-full h-full object-cover">
+                                class="w-full h-full object-cover" loading="lazy" decoding="async">
                         </div>
                         <div class="p-6 flex flex-col justify-center">
                             <div class="font-bold text-lg">{{ $d->name }}</div>
@@ -134,16 +182,16 @@
         </section>
     @endif
 
-    {{-- ===== Dewan Direksi — kartu bordered, flex-wrap centered biar baris terakhir rapi walau gak penuh 3 ===== --}}
+    {{-- ===== Jajaran Direksi — kartu bordered, flex-wrap centered biar baris terakhir rapi walau gak penuh 3 ===== --}}
     <section id="direksi" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-20">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center mb-12 reveal">Dewan Direksi</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-center mb-12 reveal">Jajaran Direksi</h2>
         <div class="flex flex-wrap justify-center gap-6">
             @forelse($direksi as $d)
                 <button onclick="openDirectorModal({{ $d->id }})"
                     class="group text-left bg-white rounded-2xl border-2 border-slate-200 overflow-hidden hover:border-primary-400 hover:shadow-xl transition-all w-full sm:w-[280px] reveal">
                     <div class="aspect-[4/5] overflow-hidden">
                         <img src="{{ $d->photo ? asset('storage/' . $d->photo) : 'https://placehold.co/400x500/e2e8f0/64748b?text=Foto' }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
                     </div>
                     <div class="p-4">
                         <div class="font-bold">{{ $d->name }}</div>

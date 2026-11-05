@@ -5,7 +5,7 @@
 @endphp
 <a href="{{ route('news.show', $item->slug) }}" class="group block bg-white rounded-xl border shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all reveal">
     <div class="h-44 overflow-hidden auto-rotate-images" data-images='@json($imgs)'>
-        <img class="rotate-img fade-img w-full h-full object-cover" src="{{ $imgs[0] }}">
+        <img class="rotate-img fade-img w-full h-full object-cover" src="{{ $imgs[0] }}" loading="lazy" decoding="async">
     </div>
     <div class="p-5">
         <span class="text-xs font-semibold text-red-600 uppercase">Perumdam TDA News</span>

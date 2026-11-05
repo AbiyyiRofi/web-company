@@ -88,7 +88,7 @@
 
     {{-- ============ UCAPAN HARAPAN & TERIMA KASIH ============ --}}
     @if($aboutUs->harapan_text || $aboutUs->harapan_photo)
-        <section class="bg-white">
+        <section>
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 grid md:grid-cols-2 gap-10 items-stretch">
                 <div class="flex justify-center md:justify-start reveal">
                     @if($aboutUs->harapan_photo)
@@ -98,7 +98,7 @@
                 <div class="reveal flex flex-col justify-center">
                     <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-900">Harapan dan Terima Kasih</h2>
                     <div class="prose max-w-none text-slate-600 leading-relaxed whitespace-pre-line">
-                        {{ $aboutUs->harapan_text }}
+                        {!! Str::inlineMarkdown(e($aboutUs->harapan_text)) !!}
                     </div>
                     @if($direkturUtama)
                         <div class="mt-6 pt-4 border-t border-slate-100">
@@ -113,7 +113,7 @@
 
     {{-- ============ PENGUMUMAN (carousel full-post) ============ --}}
     @if($latestAnnouncements->count())
-        <section class="bg-slate-50">
+        <section>
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div class="flex items-center justify-between mb-6 reveal">
                     <h2 class="text-2xl font-bold">Pengumuman</h2>
@@ -149,7 +149,7 @@
         </a>
     </section>
 
-    <section class="bg-white py-16">
+    <section class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-2xl font-bold">Media &amp; Informasi</h2>

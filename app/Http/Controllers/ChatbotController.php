@@ -50,7 +50,7 @@ Banyu Digital adalah aplikasi resmi PERUMDAM Tirta Darma Ayu di Google Play Stor
 - Profil Perusahaan, Ucapan Harapan & Terima Kasih, Visi-Misi -> get_company_profile
 - Sejarah Perusahaan per tahun -> get_company_history
 - Jajaran Direksi, Pemilik Modal, & Profil/Biodata/Deskripsi/Background Direksi -> get_directors
-- Lokasi Kantor Cabang & Instalasi Pengolahan Air (IPA) beserta Kapasitas Terpasang, Produksi, & Idle Capacity -> get_branches
+- Lokasi Kantor Cabang & Instalasi Pengolahan Air (IPA) beserta Kapasitas Terpasang, Produksi, & Idle Capacity -> get_branches (Sebutkan nama dan alamat cabang/IPA secara lengkap, dan sampaikan bahwa pengguna dapat melihat peta lokasi interaktif pada halaman "Hubungi Kami").
 - Berita & Kegiatan Terbaru -> get_latest_news
 - Pengumuman Resmi Terbaru -> get_announcements
 
@@ -106,7 +106,7 @@ PROMPT;
                 'type' => 'function',
                 'function' => [
                     'name' => 'get_directors',
-                    'description' => 'Mendapatkan daftar Dewan Direksi dan Kuasa Pemilik Modal Perumdam Tirta Darma Ayu, termasuk nama, jabatan, serta riwayat/deskripsi/biodata/latar belakang masing-masing.',
+                    'description' => 'Mendapatkan daftar Jajaran Direksi dan Kuasa Pemilik Modal Perumdam Tirta Darma Ayu, termasuk nama, jabatan, serta riwayat/deskripsi/biodata/latar belakang masing-masing.',
                     'parameters' => ['type' => 'object', 'properties' => new \stdClass()],
                 ],
             ],
@@ -148,10 +148,10 @@ PROMPT;
         }
 
         $response = Http::withToken(config('services.groq.api_key'))
-            ->timeout(45)
+            ->timeout(25)
             ->retry(2, 500, throw: false)
             ->post('https://api.groq.com/openai/v1/chat/completions', [
-                'model' => 'llama-3.3-70b-versatile',
+                'model' => 'openai/gpt-oss-20b',
                 'messages' => $messages,
                 'tools' => $tools,
                 'tool_choice' => 'auto',
