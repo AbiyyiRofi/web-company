@@ -85,6 +85,7 @@ Route::prefix('portal-internal')->name('admin.')->group(function () {
         Route::get('about-us', [AdminAboutUsController::class, 'edit'])->name('about-us.edit');
         Route::post('about-us', [AdminAboutUsController::class, 'update'])->name('about-us.update');
         Route::resource('history', \App\Http\Controllers\Admin\HistoryController::class)->except(['create', 'show', 'edit']);
+        Route::post('history/background', [\App\Http\Controllers\Admin\HistoryController::class, 'updateBackground'])->name('history.background');
         Route::resource('leadership-history', \App\Http\Controllers\Admin\LeadershipHistoryController::class)->except(['create', 'show', 'edit']);
         Route::get('directors', [DirectorController::class, 'index'])->name('directors.index');
         Route::post('directors', [DirectorController::class, 'store'])->name('directors.store');

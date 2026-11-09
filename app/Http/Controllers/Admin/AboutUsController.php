@@ -25,15 +25,13 @@ class AboutUsController extends Controller
             'sekilas_text' => 'nullable|string',
             'harapan_text' => 'nullable|string',
             'harapan_photo' => 'nullable|image',
-            'sejarah_text' => 'nullable|string',
-            'sejarah_bg_image' => 'nullable|image',
             'visi_text' => 'nullable|string',
             'misi_text' => 'nullable|string',
             'struktur_text' => 'nullable|string',
             'struktur_image' => 'nullable|image',
         ]);
 
-        foreach (['header_image', 'harapan_photo', 'sejarah_bg_image', 'struktur_image'] as $field) {
+        foreach (['header_image', 'harapan_photo', 'struktur_image'] as $field) {
             if ($request->hasFile($field)) {
                 if ($content->$field) Storage::disk('public')->delete($content->$field);
                 $data[$field] = $request->file($field)->store('about-us', 'public');

@@ -4,17 +4,24 @@
 @section('content')
 <div class="bg-white rounded-xl border p-6 mb-6">
     <h3 class="font-semibold mb-3">Header Halaman Pengadaan</h3>
-    <form action="{{ route('admin.procurement.header.update') }}" method="POST" enctype="multipart/form-data" class="grid sm:grid-cols-2 gap-4 items-end">
+    <form action="{{ route('admin.procurement.header.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4 max-w-2xl">
         @csrf
+
+        @include('partials.header-image-adjuster', [
+            'content' => $content,
+            'label' => 'Gambar Header Pengadaan',
+            'pageTitle' => 'Informasi Pengadaan',
+        ])
+
         <div>
-            @if($content->header_image)
-                <img src="{{ asset('storage/'.$content->header_image) }}" class="w-full h-24 object-cover rounded-lg mb-2">
-            @endif
-            <input type="file" name="header_image" accept="image/*" class="w-full text-sm">
+            <label class="block text-sm font-medium text-slate-700 mb-1">Caption Header (opsional)</label>
+            <input type="text" name="header_caption" value="{{ old('header_caption', $content->header_caption) }}" placeholder="Caption header (opsional)" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500">
         </div>
+
         <div>
-            <input type="text" name="header_caption" value="{{ old('header_caption', $content->header_caption) }}" placeholder="Caption header (opsional)" class="w-full border rounded-lg px-3 py-2 text-sm mb-2">
-            <button class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm">Simpan Header</button>
+            <button class="px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-semibold transition">
+                Simpan Header Pengadaan
+            </button>
         </div>
     </form>
 </div>

@@ -4,21 +4,24 @@
 @section('content')
 <div class="admin-card p-5 sm:p-6 mb-6">
     <h3 class="font-bold text-slate-800 mb-4">Header Halaman Hubungi Kami</h3>
-    <form action="{{ route('admin.branches.header.update') }}" method="POST" enctype="multipart/form-data" class="grid sm:grid-cols-2 gap-4 items-end">
+    <form action="{{ route('admin.branches.header.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4 max-w-2xl">
         @csrf
+
+        @include('partials.header-image-adjuster', [
+            'content' => $content,
+            'label' => 'Gambar Header Hubungi Kami',
+            'pageTitle' => 'Hubungi Kami',
+        ])
+
         <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1.5">Gambar Header</label>
-            @if($content->header_image)
-                <img src="{{ asset('storage/'.$content->header_image) }}" class="w-full h-24 object-cover rounded-lg mb-2">
-            @endif
-            <input type="file" name="header_image" accept="image/*" class="w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-600 hover:file:bg-primary-100 transition">
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Caption Header (opsional)</label>
+            <input type="text" name="header_caption" value="{{ old('header_caption', $content->header_caption) }}" class="admin-input">
         </div>
+
         <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1.5">Caption</label>
-            <input type="text" name="header_caption" value="{{ old('header_caption', $content->header_caption) }}" class="admin-input mb-3">
             <button class="btn-primary">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-                Simpan Header
+                Simpan Header Hubungi Kami
             </button>
         </div>
     </form>

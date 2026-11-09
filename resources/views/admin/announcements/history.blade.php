@@ -34,4 +34,5 @@
         <p class="text-slate-400 text-center py-8">Belum ada riwayat pengumuman yang kadaluarsa atau dihapus.</p>
     @endforelse
 </div>
+<div class="mt-6">{{ $announcements->links() }}</div>
 @endsection

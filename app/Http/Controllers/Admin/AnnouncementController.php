@@ -11,10 +11,13 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
+        $today = now()->toDateString();
         // Hanya ambil pengumuman Aktif/Terjadwal untuk halaman utama admin pengumuman
-        $announcements = Announcement::latest()->get()
-            ->filter(fn ($a) => in_array($a->status, ['Aktif', 'Terjadwal']))
-            ->values();
+        $announcements = Announcement::where(function ($q) use ($today) {
+            $q->whereNull('end_date')->orWhere('end_date', '>=', $today);
+        })
+        ->latest()
+        ->paginate(10);
 
         return view('admin.announcements.index', compact('announcements'));
     }
@@ -118,10 +121,17 @@ class AnnouncementController extends Controller
 
     public function history()
     {
-        $announcements = Announcement::withTrashed()->get()
-            ->filter(fn ($a) => in_array($a->status, ['Dihapus', 'Kadaluarsa']))
-            ->sortByDesc('created_at')
-            ->values();
+        $today = now()->toDateString();
+        $announcements = Announcement::withTrashed()
+            ->where(function ($q) use ($today) {
+                $q->whereNotNull('deleted_at')
+                  ->orWhere(function ($q2) use ($today) {
+                      $q2->whereNotNull('end_date')
+                         ->where('end_date', '<', $today);
+                  });
+            })
+            ->latest()
+            ->paginate(10);
 
         return view('admin.announcements.history', compact('announcements'));
     }
