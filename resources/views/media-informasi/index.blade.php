@@ -149,7 +149,7 @@
             @forelse($latestGalleries as $g)
                 <a href="{{ route('galleries.show', $g) }}"
                     class="group block rounded-xl overflow-hidden border hover:shadow-lg transition-all relative h-48 reveal">
-                    @if($g->photos->first())
+                    @if($g->photos->first() && !empty($g->photos->first()->image_path) && $g->photos->first()->image_path !== '0')
                         <img src="{{ asset('storage/' . $g->photos->first()->image_path) }}"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
                     @else

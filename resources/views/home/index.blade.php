@@ -10,10 +10,14 @@
                     <div class="header-slide absolute inset-0 {{ $i === 0 ? '' : 'hidden' }}"
                         data-duration="{{ $slide->duration_seconds }}" data-title="{{ $slide->title ?: 'Slide ' . ($i + 1) }}">
                         @if($slide->media_type === 'video')
-                            <video src="{{ asset('storage/' . $slide->file_path) }}" class="w-full h-full object-cover" muted
-                                playsinline></video>
+                            @if($slide->file_path && $slide->file_path !== '0')
+                                <video src="{{ asset('storage/' . $slide->file_path) }}" class="w-full h-full object-cover" muted
+                                    playsinline></video>
+                            @endif
                         @else
-                            <img src="{{ asset('storage/' . $slide->file_path) }}" class="w-full h-full object-cover">
+                            @if($slide->file_path && $slide->file_path !== '0')
+                                <img src="{{ asset('storage/' . $slide->file_path) }}" class="w-full h-full object-cover">
+                            @endif
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/30"></div>
                     </div>

@@ -22,7 +22,9 @@ class GalleryController extends Controller
                 'slug' => $slug,
                 'label' => $label,
                 'galleries' => $galleries,
-                'covers' => $galleries->map(fn ($g) => optional($g->photos->first())->image_path)->filter()->values(),
+                'covers' => $galleries->map(fn ($g) => optional($g->photos->first())->image_path)
+                    ->filter(fn ($path) => !empty($path) && $path !== '0')
+                    ->values(),
             ];
         })->values();
 

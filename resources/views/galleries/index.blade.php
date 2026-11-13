@@ -59,7 +59,7 @@
             <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6" data-reveal-group>
                 @foreach($cat['galleries'] as $g)
                     <button type="button" onclick="openAlbum({{ $g->id }})" class="group block text-left rounded-xl overflow-hidden border hover:shadow-lg transition-all relative h-56 reveal">
-                        @if($g->photos->first())
+                        @if($g->photos->first() && !empty($g->photos->first()->image_path) && $g->photos->first()->image_path !== '0')
                             <img src="{{ asset('storage/'.$g->photos->first()->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
                         @else
                             <div class="w-full h-full bg-slate-100"></div>
@@ -91,7 +91,10 @@
         return [
             'id' => $g->id,
             'title' => $g->title,
-            'photos' => $g->photos->map(fn ($p) => asset('storage/'.$p->image_path))->values(),
+            'photos' => $g->photos
+                ->filter(fn ($p) => !empty($p->image_path) && $p->image_path !== '0')
+                ->map(fn ($p) => asset('storage/'.$p->image_path))
+                ->values(),
         ];
     })->values();
 @endphp
