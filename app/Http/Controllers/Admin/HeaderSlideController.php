@@ -30,29 +30,136 @@ class HeaderSlideController extends Controller
             return back()->with('error', 'Maksimal 5 poster header.');
         }
 
-        $data = $request->validate([
+        $mediaType = $request->input('media_type', 'image');
+
+        $rules = [
             'title' => 'nullable|string|max:255',
-            'media_type' => 'required|in:image,video',
-            'file' => 'required|file|mimes:jpg,jpeg,png,webp,mp4,mov,webm',
-            'duration_seconds' => 'required|integer|min:3|max:60',
+            'media_type' => 'required|in:image,video,youtube',
+            'duration_seconds' => 'required|integer|min:3|max:300',
+        ];
+
+        if ($mediaType === 'youtube') {
+            $rules['youtube_url'] = 'required|string|max:500';
+        } elseif ($mediaType === 'video') {
+            $rules['file'] = 'required|file|mimes:mp4,mov,webm|max:102400';
+        } else {
+            $rules['file'] = 'required|file|mimes:jpg,jpeg,png,webp|max:10240';
+        }
+
+        $data = $request->validate($rules, [
+            'youtube_url.required' => 'Link video YouTube wajib diisi jika memilih opsi YouTube.',
+            'file.required' => 'File media wajib dipilih.',
+            'file.mimes' => 'Format file tidak didukung.',
+            'file.max' => 'Ukuran file melebihi batas maksimal server.',
         ]);
 
-        $path = $request->file('file')->store('header-slides', 'public');
+        $filePath = null;
+        $youtubeUrl = null;
+        $youtubeId = null;
+
+        if ($mediaType === 'youtube') {
+            $youtubeId = HomeHeaderSlide::extractYoutubeId($data['youtube_url']);
+            if (!$youtubeId) {
+                return back()->withInput()->withErrors([
+                    'youtube_url' => 'Format link YouTube tidak valid. Contoh format: https://www.youtube.com/watch?v=... atau https://youtu.be/...',
+                ]);
+            }
+            $youtubeUrl = $data['youtube_url'];
+        } else {
+            $filePath = $request->file('file')->store('header-slides', 'public');
+        }
 
         HomeHeaderSlide::create([
             'title' => $data['title'] ?? null,
-            'media_type' => $data['media_type'],
-            'file_path' => $path,
+            'media_type' => $mediaType,
+            'file_path' => $filePath,
+            'youtube_url' => $youtubeUrl,
+            'youtube_id' => $youtubeId,
             'duration_seconds' => $data['duration_seconds'],
-            'sort_order' => HomeHeaderSlide::max('sort_order') + 1,
+            'sort_order' => (int) HomeHeaderSlide::max('sort_order') + 1,
         ]);
 
-        return redirect()->route('admin.header-slides.index')->with('success', 'Poster berhasil ditambahkan.');
+        return redirect()->route('admin.header-slides.index')->with('success', 'Poster header berhasil ditambahkan.');
+    }
+
+    public function edit(HomeHeaderSlide $slide)
+    {
+        return view('admin.header-slides.edit', compact('slide'));
+    }
+
+    public function update(Request $request, HomeHeaderSlide $slide)
+    {
+        $mediaType = $request->input('media_type', $slide->media_type);
+
+        $rules = [
+            'title' => 'nullable|string|max:255',
+            'media_type' => 'required|in:image,video,youtube',
+            'duration_seconds' => 'required|integer|min:3|max:300',
+        ];
+
+        if ($mediaType === 'youtube') {
+            $rules['youtube_url'] = 'required|string|max:500';
+        } elseif ($mediaType === 'video') {
+            $rules['file'] = 'nullable|file|mimes:mp4,mov,webm|max:102400';
+        } else {
+            $rules['file'] = 'nullable|file|mimes:jpg,jpeg,png,webp|max:10240';
+        }
+
+        $data = $request->validate($rules, [
+            'youtube_url.required' => 'Link video YouTube wajib diisi jika memilih opsi YouTube.',
+            'file.mimes' => 'Format file tidak didukung.',
+            'file.max' => 'Ukuran file melebihi batas maksimal server.',
+        ]);
+
+        $filePath = $slide->file_path;
+        $youtubeUrl = $slide->youtube_url;
+        $youtubeId = $slide->youtube_id;
+
+        if ($mediaType === 'youtube') {
+            $extractedId = HomeHeaderSlide::extractYoutubeId($data['youtube_url']);
+            if (!$extractedId) {
+                return back()->withInput()->withErrors([
+                    'youtube_url' => 'Format link YouTube tidak valid. Contoh format: https://www.youtube.com/watch?v=... atau https://youtu.be/...',
+                ]);
+            }
+            $youtubeId = $extractedId;
+            $youtubeUrl = $data['youtube_url'];
+            if ($filePath && Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->delete($filePath);
+                $filePath = null;
+            }
+        } else {
+            if ($request->hasFile('file')) {
+                if ($filePath && Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+                $filePath = $request->file('file')->store('header-slides', 'public');
+            } elseif (!$filePath && $slide->media_type === 'youtube') {
+                return back()->withInput()->withErrors([
+                    'file' => 'File wajib diunggah untuk tipe media ini.',
+                ]);
+            }
+            $youtubeUrl = null;
+            $youtubeId = null;
+        }
+
+        $slide->update([
+            'title' => $data['title'] ?? null,
+            'media_type' => $mediaType,
+            'file_path' => $filePath,
+            'youtube_url' => $youtubeUrl,
+            'youtube_id' => $youtubeId,
+            'duration_seconds' => $data['duration_seconds'],
+        ]);
+
+        return redirect()->route('admin.header-slides.index')->with('success', 'Poster header berhasil diperbarui.');
     }
 
     public function destroy(HomeHeaderSlide $slide)
     {
-        Storage::disk('public')->delete($slide->file_path);
+        if ($slide->file_path && Storage::disk('public')->exists($slide->file_path)) {
+            Storage::disk('public')->delete($slide->file_path);
+        }
         $slide->delete();
 
         return back()->with('success', 'Poster berhasil dihapus.');

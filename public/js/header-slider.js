@@ -86,12 +86,10 @@ document.addEventListener('DOMContentLoaded', function () {
         labelBtns.forEach((btn, i) => {
             const txt = btn.querySelector('.slider-label-text');
             if (isMobile) {
-                // On mobile, show only active item full width
                 btn.classList.toggle('hidden', i !== activeIndex);
                 btn.classList.toggle('block', i === activeIndex);
                 txt.classList.add('text-white');
             } else {
-                // On desktop/tablet, show all side-by-side
                 btn.classList.remove('hidden');
                 btn.classList.add('block');
                 txt.classList.toggle('text-white', i === activeIndex);
@@ -102,23 +100,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('resize', () => updateResponsiveLabels(current));
 
+    function sendYtCommand(iframe, func, args = []) {
+        if (!iframe || !iframe.contentWindow) return;
+        try {
+            iframe.contentWindow.postMessage(JSON.stringify({
+                event: 'command',
+                func: func,
+                args: args
+            }), '*');
+        } catch (err) {}
+    }
+
     function showSlide(index) {
         current = index;
-        slides.forEach((s, i) => s.classList.toggle('hidden', i !== index));
+
+        slides.forEach((s, i) => {
+            const isCurrent = (i === index);
+            s.classList.toggle('hidden', !isCurrent);
+
+            // 1. Native HTML5 Video
+            const video = s.querySelector('video');
+            if (video) {
+                if (isCurrent) {
+                    video.currentTime = 0;
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            }
+
+            // 2. YouTube Iframe
+            const iframe = s.querySelector('iframe');
+            if (iframe) {
+                if (isCurrent) {
+                    if (!iframe.src && iframe.dataset.src) {
+                        iframe.src = iframe.dataset.src;
+                    } else {
+                        sendYtCommand(iframe, 'mute');
+                        sendYtCommand(iframe, 'seekTo', [0, true]);
+                        sendYtCommand(iframe, 'playVideo');
+                    }
+                } else {
+                    sendYtCommand(iframe, 'pauseVideo');
+                }
+            }
+        });
+
         fills.forEach((f, i) => {
             f.style.transition = 'none';
             f.style.width = i < index ? '100%' : '0%';
         });
         updateResponsiveLabels(index);
 
-        const video = slides[index].querySelector('video');
-        if (video) {
-            video.currentTime = 0;
-            video.play().catch(() => { });
-        }
-
         elapsed = 0;
-        const duration = parseFloat(slides[index].dataset.duration) * 1000;
+        const duration = parseFloat(slides[index].dataset.duration || 6) * 1000;
         clearInterval(progressInterval);
 
         progressInterval = setInterval(() => {

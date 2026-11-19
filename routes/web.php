@@ -152,6 +152,8 @@ Route::prefix('portal-internal')->name('admin.')->group(function () {
         Route::get('header-slides', [HeaderSlideController::class, 'index'])->name('header-slides.index');
         Route::get('header-slides/create', [HeaderSlideController::class, 'create'])->name('header-slides.create');
         Route::post('header-slides', [HeaderSlideController::class, 'store'])->name('header-slides.store');
+        Route::get('header-slides/{slide}/edit', [HeaderSlideController::class, 'edit'])->name('header-slides.edit');
+        Route::put('header-slides/{slide}', [HeaderSlideController::class, 'update'])->name('header-slides.update');
         Route::delete('header-slides/{slide}', [HeaderSlideController::class, 'destroy'])->name('header-slides.destroy');
         Route::post('header-slides/{slide}/toggle', [HeaderSlideController::class, 'toggle'])->name('header-slides.toggle');
 

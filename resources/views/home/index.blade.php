@@ -4,12 +4,42 @@
 @section('content')
 
     @if($slides->count())
+        <style>
+            .yt-header-iframe {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 115vw;
+                height: 65vw;
+                min-height: 115%;
+                min-width: 205vh;
+                pointer-events: none;
+                border: 0;
+            }
+        </style>
         <section class="relative bg-slate-900 overflow-hidden" style="height: min(80vh, 620px)">
             <div id="headerSlider" class="relative w-full h-full cursor-pointer select-none">
                 @foreach($slides as $i => $slide)
                     <div class="header-slide absolute inset-0 {{ $i === 0 ? '' : 'hidden' }}"
                         data-duration="{{ $slide->duration_seconds }}" data-title="{{ $slide->title ?: 'Slide ' . ($i + 1) }}">
-                        @if($slide->media_type === 'video')
+                        @if($slide->media_type === 'youtube' && $slide->youtube_id)
+                            <div class="w-full h-full overflow-hidden relative pointer-events-none">
+                                <iframe
+                                    id="yt-slide-{{ $i }}"
+                                    class="yt-header-iframe pointer-events-none select-none"
+                                    @if($i === 0)
+                                        src="https://www.youtube-nocookie.com/embed/{{ $slide->youtube_id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ $slide->youtube_id }}&enablejsapi=1&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3"
+                                    @else
+                                        data-src="https://www.youtube-nocookie.com/embed/{{ $slide->youtube_id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ $slide->youtube_id }}&enablejsapi=1&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3"
+                                    @endif
+                                    title="{{ $slide->title ?: 'Video Header' }}"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    tabindex="-1">
+                                </iframe>
+                            </div>
+                        @elseif($slide->media_type === 'video')
                             @if($slide->file_path && $slide->file_path !== '0')
                                 <video src="{{ asset('storage/' . $slide->file_path) }}" class="w-full h-full object-cover" muted
                                     playsinline></video>
@@ -19,7 +49,7 @@
                                 <img src="{{ asset('storage/' . $slide->file_path) }}" class="w-full h-full object-cover">
                             @endif
                         @endif
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/30"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/30 pointer-events-none"></div>
                     </div>
                 @endforeach
             </div>
