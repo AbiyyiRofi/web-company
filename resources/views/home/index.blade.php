@@ -96,8 +96,8 @@
             <h1 class="text-3xl sm:text-5xl font-bold text-white max-w-2xl leading-tight reveal">
                 Air bersih, pelayanan terpercaya untuk Indramayu.
             </h1>
-            <p class="text-primary-100 mt-6 max-w-xl leading-relaxed reveal">
-                {{ \Illuminate\Support\Str::limit(strip_tags($aboutUs->sekilas_text), 220) ?: 'Menghadirkan sarana air bersih dan pelayanan publik yang andal, transparan, dan berkelanjutan bagi seluruh masyarakat Kabupaten Indramayu.' }}
+            <p class="text-primary-100 mt-6 max-w-4xl lg:max-w-5xl leading-relaxed reveal">
+                {{ \Illuminate\Support\Str::limit(strip_tags($aboutUs->sekilas_text), 450) ?: 'Menghadirkan sarana air bersih dan pelayanan publik yang andal, transparan, dan berkelanjutan bagi seluruh masyarakat Kabupaten Indramayu.' }}
             </p>
             <div class="flex flex-wrap items-center gap-4 mt-10 reveal">
                 <a href="{{ route('about-us.index') }}"
@@ -123,13 +123,15 @@
     {{-- ============ UCAPAN HARAPAN & TERIMA KASIH ============ --}}
     @if($aboutUs->harapan_text || $aboutUs->harapan_photo)
         <section>
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 grid md:grid-cols-2 gap-10 items-stretch">
-                <div class="flex justify-center md:justify-start reveal">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 grid md:grid-cols-2 gap-10 items-start">
+                <div class="flex justify-center md:justify-start reveal md:sticky md:top-28">
                     @if($aboutUs->harapan_photo)
-                        <img src="{{ asset('storage/' . $aboutUs->harapan_photo) }}" class="w-full h-full object-contain">
+                        <div class="w-full max-w-md rounded-2xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800">
+                            <img src="{{ asset('storage/' . $aboutUs->harapan_photo) }}" class="w-full h-auto object-cover max-h-[550px]">
+                        </div>
                     @endif
                 </div>
-                <div class="reveal flex flex-col justify-center">
+                <div class="reveal flex flex-col">
                     <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-900">Harapan dan Terima Kasih</h2>
                     <div class="prose max-w-none text-slate-600 leading-relaxed whitespace-pre-line">
                         {!! Str::inlineMarkdown(e($aboutUs->harapan_text)) !!}

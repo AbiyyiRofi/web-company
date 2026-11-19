@@ -381,14 +381,17 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .mobile-logo-img {
-            height: 3rem; /* 48px pada Non-Sticky */
+            height: 3.5rem; /* 56px pada Non-Sticky */
+            transform: scale(1.15);
+            transform-origin: left center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         #mainHeader.nav-scrolled .mobile-nav-bar {
-            height: 58px;
+            height: 62px;
         }
         #mainHeader.nav-scrolled .mobile-logo-img {
-            height: 2.25rem; /* 36px pada Sticky (mengecil secara halus) */
+            height: 2.75rem; /* 44px pada Sticky */
+            transform: scale(1.15);
         }
         #mainHeader.nav-scrolled {
             background: rgba(255, 255, 255, 0.97);
@@ -525,10 +528,10 @@
                         Cek Tagihan</a>
                 </div>
 
-                <div class="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20 sm:h-24">
                     <a href="{{ route('home') }}" class="flex items-center shrink-0 ml-2 sm:ml-4">
                         @if($siteLogo->logo)
-                            <img src="{{ asset('storage/' . $siteLogo->logo) }}" class="h-20 w-auto object-contain">
+                            <img src="{{ asset('storage/' . $siteLogo->logo) }}" class="h-20 sm:h-24 w-auto object-contain scale-110 sm:scale-125 origin-left transition-transform">
                         @else
                             <span class="text-4xl text-white">💧</span>
                         @endif
@@ -594,7 +597,7 @@
                 <div class="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-[76px]">
                     <a href="{{ route('home') }}" class="flex items-center shrink-0">
                         @if($siteLogo->logo)
-                            <img src="{{ asset('storage/' . $siteLogo->logo) }}" class="h-12 w-auto object-contain">
+                            <img src="{{ asset('storage/' . $siteLogo->logo) }}" class="h-14 sm:h-16 w-auto object-contain scale-110 sm:scale-125 origin-left transition-transform">
                         @else
                             <span class="text-3xl">💧</span>
                         @endif
